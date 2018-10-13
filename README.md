@@ -1,13 +1,13 @@
 # color
 
-# dev environment
+## dev environment
 
 ```
 yarn install
 yarn start
 ```
 
-# don't have yarn?
+## don't have yarn?
 ```
 npm install -g yarn
 ```
