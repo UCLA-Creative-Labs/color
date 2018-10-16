@@ -1,16 +1,13 @@
-# colors
+# color
 
-## frontend
+## dev environment
 
--p5.js (drawing)
--react.js (structuring; create-react-app2)
--button
--modal/popup
--canvas
--MIDI.js (for sounds)
+```
+yarn install
+yarn start
+```
 
-## design
-
--musically-inclined
--good ui designs
--good ux ideas
+## don't have yarn?
+```
+npm install -g yarn
+```
