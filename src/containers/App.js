@@ -12,7 +12,7 @@ class App extends Component {
       <div className="App">
         <h1>Welcome to Color</h1>
         
-        <Button ButtonImg = {Play} ButtonType = {Types[1]} >
+        <Button ButtonImg = {Play} ButtonType = "Play">
         </Button>
 
 		<Button ButtonImg = {Pause} ButtonType = "Pause" >
