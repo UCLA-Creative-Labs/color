@@ -1,13 +1,24 @@
 import React, { Component } from "react";
+import Play from "../Images/Playbutton.png";
+import Pause from "../Images/Pausebutton.png";
 
 import Button from "../components/button";
 
 class App extends Component {
+  
   render() {
+
     return (
       <div className="App">
         <h1>Welcome to Color</h1>
-        <Button>This is a button</Button>
+        
+        <Button ButtonImg = {Play} ButtonType = {Types[1]} >
+        </Button>
+
+		<Button ButtonImg = {Pause} ButtonType = "Pause" >
+        </Button>
+
+
       </div>
     );
   }

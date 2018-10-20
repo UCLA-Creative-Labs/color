@@ -1,14 +1,34 @@
 import React, { Component } from "react";
+import Play from "../Images/Playbutton.png";
+
+/*
+
+*/
 
 class Button extends Component {
-  render() {
-    const { children } = this.props;
+
+activate(text,type){
+ 	if (type === 'Play'){
+ 		return alert(text + "play");
+ 	}
+ 	else if(type === 'Pause') {
+ 		return alert(text + "pause");
+ 	}
+ }
+ 
+ render() {
+
+    const {ButtonImg, ButtonType} = this.props;
 
     return (
       <div>
-        <input type="button" value={children} />
+      	<button 
+      	onClick = {(e) => { this.activate("test ",ButtonType)}} >
+      	{<img src={ButtonImg} />}
+      	</button>
       </div>
     );
+
   }
 }
 
