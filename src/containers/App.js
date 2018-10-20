@@ -5,19 +5,23 @@ import Pause from "../Images/Pausebutton.png";
 import Button from "../components/button";
 
 class App extends Component {
-  
+
+ activate(text){
+ 	alert(text);
+ }
+
+ 
+
   render() {
 
     return (
       <div className="App">
         <h1>Welcome to Color</h1>
         
-        <Button ButtonImg = {Play} ButtonType = "Play">
+    	<Button ButtonImg = {Pause} ButtonType = "Pause" func = {this.activate}>
         </Button>
-
-		<Button ButtonImg = {Pause} ButtonType = "Pause" >
+        <Button ButtonImg = {Play} ButtonType = "Play" func = {this.activate}>
         </Button>
-
 
       </div>
     );

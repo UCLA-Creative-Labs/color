@@ -7,25 +7,17 @@ import Play from "../Images/Playbutton.png";
 
 class Button extends Component {
 
-activate(text,type){
- 	if (type === 'Play'){
- 		return alert(text + "play");
- 	}
- 	else if(type === 'Pause') {
- 		return alert(text + "pause");
- 	}
- }
+
  
  render() {
 
-    const {ButtonImg, ButtonType} = this.props;
+    const {ButtonImg, ButtonType,func} = this.props;
 
     return (
       <div>
-      	<button 
-      	onClick = {(e) => { this.activate("test ",ButtonType)}} >
-      	{<img src={ButtonImg} />}
-      	</button>
+       	<img src={ButtonImg} onClick = {(e) => { func("argument")}} >
+      	</img>
+
       </div>
     );
 
