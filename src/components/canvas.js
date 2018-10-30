@@ -35,7 +35,6 @@ const sketch = p5 => {
       if (drawings.length > 0){
         drawings[drawings.length-1].undo();
         console.log(drawings);
-        p5.loop();
       }
     }
   };
@@ -48,7 +47,7 @@ const sketch = p5 => {
       p5.strokeWeight(10);
       p5.stroke(0);
       if (p5.mouseIsPressed === true) {
-        p5.line(this.x, this.y, p5.pmouseX, p5.pmouseY);
+        p5.line(p5.mouseX, p5.mouseY, p5.pmouseX, p5.pmouseY);
         // p5.ellipse(this.x, this.y, 50, 50);
       }
     }
