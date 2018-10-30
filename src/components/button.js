@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import Play from "../Images/Playbutton.png";
 
 /*
 
@@ -11,7 +10,7 @@ class Button extends Component {
  
  render() {
 
-    const {ButtonImg, ButtonType,func} = this.props;
+    const {ButtonImg,func} = this.props;
 
     return (
       <div>
