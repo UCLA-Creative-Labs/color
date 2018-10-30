@@ -31,15 +31,9 @@ const sketch = p5 => {
   }
 
   p5.mouseDragged = () => {
-<<<<<<< HEAD
     // p5.strokeWeight(10);
-    // p5.stroke(51);
+    // p5.stroke(curr_color);
     // p5.line(p5.mouseX, p5.mouseY, p5.pmouseX, p5.pmouseY);
-=======
-    p5.strokeWeight(10);
-    p5.stroke(curr_color);
-    p5.line(p5.mouseX, p5.mouseY, p5.pmouseX, p5.pmouseY);
->>>>>>> 18f7d82b8b3221f9ac8c17cc482282fff5cbfe91
   };
 
   p5.keyPressed = () => {
@@ -68,12 +62,15 @@ const sketch = p5 => {
         curr_color = p5.color(color_options.scheme_3[1]);
         break;
     }
+    /*
     if (p5.key === "U" || p5.key === "u") {
       if (drawings.length > 0){
         drawings[drawings.length-1].undo();
         console.log(drawings);
       }
     }
+    */
+
   };
 
   function Drawing(x, y) {
@@ -82,7 +79,7 @@ const sketch = p5 => {
 
     this.display = () => {
       p5.strokeWeight(10);
-      p5.stroke(0);
+      p5.stroke(curr_color);
       if (p5.mouseIsPressed === true) {
         p5.line(p5.mouseX, p5.mouseY, p5.pmouseX, p5.pmouseY);
         // p5.ellipse(this.x, this.y, 50, 50);
