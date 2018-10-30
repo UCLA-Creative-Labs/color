@@ -5,8 +5,17 @@ import P5Wrapper from "react-p5-wrapper";
 var drawings = [];
 
 const sketch = p5 => {
+  let curr_color;
+
+  const color_options = {
+    scheme_1: ["#94EBD8", "#00B349"],
+    scheme_2: ["#983275", "#FF6F01"],
+    scheme_3: ["#C3A706", "#329290"]
+  };
+
   p5.setup = () => {
     p5.createCanvas(p5.windowWidth, p5.windowHeight);
+    curr_color = p5.color("#000000");
   };
 
   p5.draw = () => {
@@ -22,14 +31,42 @@ const sketch = p5 => {
   }
 
   p5.mouseDragged = () => {
+<<<<<<< HEAD
     // p5.strokeWeight(10);
     // p5.stroke(51);
     // p5.line(p5.mouseX, p5.mouseY, p5.pmouseX, p5.pmouseY);
+=======
+    p5.strokeWeight(10);
+    p5.stroke(curr_color);
+    p5.line(p5.mouseX, p5.mouseY, p5.pmouseX, p5.pmouseY);
+>>>>>>> 18f7d82b8b3221f9ac8c17cc482282fff5cbfe91
   };
 
   p5.keyPressed = () => {
-    if (p5.key === "R" || p5.key === "r") {
-      p5.clear();
+    switch (p5.key) {
+      case "R":
+      case "r":
+        p5.clear();
+        curr_color = p5.color("#000000");
+        break;
+      case "T":
+        curr_color = p5.color(color_options.scheme_1[0]);
+        break;
+      case "G":
+        curr_color = p5.color(color_options.scheme_1[1]);
+        break;
+      case "Y":
+        curr_color = p5.color(color_options.scheme_2[0]);
+        break;
+      case "H":
+        curr_color = p5.color(color_options.scheme_2[1]);
+        break;
+      case "U":
+        curr_color = p5.color(color_options.scheme_3[0]);
+        break;
+      case "J":
+        curr_color = p5.color(color_options.scheme_3[1]);
+        break;
     }
     if (p5.key === "U" || p5.key === "u") {
       if (drawings.length > 0){
