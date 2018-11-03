@@ -25,7 +25,12 @@ closeModalHandler = () => {
     });
 }
 
+activate(text){
+ 	alert(text);
+}
+
   render() {
+
     return (
       <div className="App">
         <h1>Welcome to Color</h1>
@@ -38,7 +43,7 @@ closeModalHandler = () => {
             close={this.closeModalHandler}>
                 This is such a cool project whoo go draw shit and hear it make music amazing <br/>
                 Brought to u by us
-        </Modal> 
+        </Modal>
         <Canvas />
       </div>
     );

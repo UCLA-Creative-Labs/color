@@ -1,14 +1,25 @@
 import React, { Component } from "react";
 
+/*
+
+*/
+
 class Button extends Component {
-  render() {
-    const { children } = this.props;
+
+
+ 
+ render() {
+
+    const {ButtonImg,func} = this.props;
 
     return (
       <div>
-        <input type="button" value={children} />
+       	<img src={ButtonImg} onClick = {(e) => { func("argument")}} >
+      	</img>
+
       </div>
     );
+
   }
 }
 
