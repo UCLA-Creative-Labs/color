@@ -6,6 +6,12 @@
     transition: all .8s;
     width: 60%;
     /*height: 60%;*/
+
+    /* overlay */
+    position: absolute;
+    transform: translate(50%, 50%);
+    background-color: rgba(0,0,0,0.3); 
+
 }
 
 .modal-header {
