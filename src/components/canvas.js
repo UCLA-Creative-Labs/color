@@ -60,15 +60,17 @@ const sketch = p5 => {
     curr_color = p5.color("#000000");
 
     //initialize Grid objects
-    for (var i = 0; i < 4; i++) {
-      for (var j = 0; j < 4; j++) {
-        let g = new Grid({
-          xstart: windowWidth*i/4,
-          xend: windowWidth*(i+1)/4,
-          ystart: windowHeight*j/4,
-          yend: windowHeight*(j+1)/4,
-        }, /*sound file*/);
-
+    for (let i = 0; i < 4; i++) {
+      for (let j = 0; j < 4; j++) {
+        let g = new Grid(
+          {
+            xstart: (windowWidth * i) / 4,
+            xend: (windowWidth * (i + 1)) / 4,
+            ystart: (windowHeight * j) / 4,
+            yend: (windowHeight * (j + 1)) / 4
+          },
+          "../assets/medicine.mp3"
+        );
         //push to grid array
         gridArr.push(g);
       }
@@ -99,12 +101,17 @@ const sketch = p5 => {
     //drawings[drawings.length-1].update();
   };
 
-  /*
   p5.mouseReleased = () => {
-    drawings.push(new Drawing(prevX, prevY, p5.mouseX, p5.mouseY));
-    console.log(drawings);
+    //drawings.push(new Drawing(prevX, prevY, p5.mouseX, p5.mouseY));
+    //console.log(drawings);
+
+    // check stroke click and play sound
+    gridArr.forEach(element => {
+      if (element.check_bound(p5.pmouseX, p5.pmouseY)) {
+        element.play_sound();
+      }
+    });
   };
-  */
 
   p5.keyPressed = () => {
     switch (p5.key) {
