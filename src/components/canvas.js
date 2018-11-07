@@ -4,11 +4,47 @@ import P5Wrapper from "react-p5-wrapper";
 //array of drawings to push and splice
 //var drawings = [];
 
+// window dimensions
+let windowHeight = window.innerHeight;
+let windowWidth = window.innerWidth;
+let curr_color;
+//let prevX;
+//let prevY;
+//let md = false; //mouse dragged
+
 const sketch = p5 => {
-  let curr_color;
-  //let prevX;
-  //let prevY;
-  //let md = false; //mouse dragged
+  // grid class
+  class Grid {
+    constructor(boundaries, sound_file) {
+      this.boundary_xstart = boundaries.xstart;
+      this.boundary_xend = boundaries.xend;
+      this.boundary_ystart = boundaries.ystart;
+      this.boundary_yend = boundaries.yend;
+      this.sound_file = sound_file;
+    }
+
+    check_bound(x, y) {
+      if (
+        x >= this.boundary_xstart &&
+        x <= this.boundary_xend &&
+        y >= this.boundary_ystart &&
+        y <= this.boundary_yend
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+
+    play_sound() {
+      let loaded_sound = p5.loadSound(this.sound_file);
+      if (loaded_sound.isPlaying()) {
+        loaded_sound.stop();
+      } else {
+        loaded_sound.play();
+      }
+    }
+  }
 
   const color_options = {
     scheme_1: ["#94EBD8", "#00B349"],
