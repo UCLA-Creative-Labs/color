@@ -13,6 +13,9 @@ let curr_color;
 //let md = false; //mouse dragged
 
 const sketch = p5 => {
+  //array of Grid objects
+  let gridArr = [];
+
   // grid class
   class Grid {
     constructor(boundaries, sound_file) {
@@ -55,6 +58,21 @@ const sketch = p5 => {
   p5.setup = () => {
     p5.createCanvas(p5.windowWidth, p5.windowHeight);
     curr_color = p5.color("#000000");
+
+    //initialize Grid objects
+    for (var i = 0; i < 4; i++) {
+      for (var j = 0; j < 4; j++) {
+        let g = new Grid({
+          xstart: windowWidth*i/4,
+          xend: windowWidth*(i+1)/4,
+          ystart: windowHeight*j/4,
+          yend: windowHeight*(j+1)/4,
+        }, /*sound file*/);
+
+        //push to grid array
+        gridArr.push(g);
+      }
+    }
   };
 
   p5.draw = () => {
