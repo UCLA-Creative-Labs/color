@@ -1,54 +1,51 @@
 import React, { Component } from "react";
 import P5Wrapper from "react-p5-wrapper";
-
-//array of drawings to push and splice
-//var drawings = [];
+import Tone from "tone";
 
 // window dimensions
 let windowHeight = window.innerHeight;
 let windowWidth = window.innerWidth;
 let curr_color;
-//let prevX;
-//let prevY;
-//let md = false; //mouse dragged
+
+// tone.js
+// note scale must be backwards
+const note_duration = "4n";
+const scale = ["C5", "B4", "A4", "G4", "F4", "E4", "D4", "C4"];
 
 const sketch = p5 => {
   //array of Grid objects
   let gridArr = [];
 
+  //stroke start location
+  let stroke_start;
+
   // grid class
   class Grid {
-    constructor(boundaries, sound_file) {
+    constructor(boundaries, note_freq) {
       this.boundary_xstart = boundaries.xstart;
       this.boundary_xend = boundaries.xend;
       this.boundary_ystart = boundaries.ystart;
       this.boundary_yend = boundaries.yend;
-      this.sound_file = sound_file;
+      // sound init
+      this.synth = new Tone.Synth().toMaster();
+      this.note_freq = note_freq;
     }
 
     check_bound(x, y) {
-      if (
+      return (
         x >= this.boundary_xstart &&
         x <= this.boundary_xend &&
         y >= this.boundary_ystart &&
         y <= this.boundary_yend
-      ) {
-        return true;
-      } else {
-        return false;
-      }
+      );
     }
 
     play_sound() {
-      let loaded_sound = p5.loadSound(this.sound_file);
-      if (loaded_sound.isPlaying()) {
-        loaded_sound.stop();
-      } else {
-        loaded_sound.play();
-      }
+      this.synth.triggerAttackRelease(this.note_freq, note_duration);
     }
   }
 
+  // color schemes
   const color_options = {
     scheme_1: ["#94EBD8", "#00B349"],
     scheme_2: ["#983275", "#FF6F01"],
@@ -60,54 +57,41 @@ const sketch = p5 => {
     curr_color = p5.color("#000000");
 
     //initialize Grid objects
-    for (let i = 0; i < 4; i++) {
-      for (let j = 0; j < 4; j++) {
-        let g = new Grid(
-          {
-            xstart: (windowWidth * i) / 4,
-            xend: (windowWidth * (i + 1)) / 4,
-            ystart: (windowHeight * j) / 4,
-            yend: (windowHeight * (j + 1)) / 4
-          },
-          "../assets/medicine.mp3"
-        );
-        //push to grid array
-        gridArr.push(g);
-      }
+    for (let j = 0; j < 8; j++) {
+      const g = new Grid(
+        {
+          xstart: 0,
+          xend: windowWidth,
+          ystart: (windowHeight * j) / 8,
+          yend: (windowHeight * (j + 1)) / 8
+        },
+        scale[j]
+      );
+      //push to grid array
+      gridArr.push(g);
     }
   };
 
-  p5.draw = () => {
-    // do nothing
-    //for (var i = 0; i < drawings.length; i++) {
-    //  drawings[i].update();
-    //}
-    // if (drawings.length){
-    //   drawings[drawings.length-1].update();
-    // }
-  };
+  p5.draw = () => {};
 
   p5.mousePressed = () => {
-    // prevX = p5.pmouseX;
-    // prevY = p5.pmouseY;
+    // store stroke start for playing at end of stroke
+    stroke_start = [p5.mouseX, p5.mouseY];
   };
 
   p5.mouseDragged = () => {
     p5.strokeWeight(10);
     p5.stroke(curr_color);
     p5.line(p5.mouseX, p5.mouseY, p5.pmouseX, p5.pmouseY);
-    //prevX = p5.pmouseX;
-    //prevY = p5.pmouseY;
-    //drawings[drawings.length-1].update();
   };
 
   p5.mouseReleased = () => {
-    //drawings.push(new Drawing(prevX, prevY, p5.mouseX, p5.mouseY));
-    //console.log(drawings);
-
-    // check stroke click and play sound
+    // check stroke click and play both sounds
     gridArr.forEach(element => {
-      if (element.check_bound(p5.pmouseX, p5.pmouseY)) {
+      if (element.check_bound(p5.mouseX, p5.mouseY)) {
+        element.play_sound();
+      }
+      if (element.check_bound(stroke_start[0], stroke_start[1])) {
         element.play_sound();
       }
     });
