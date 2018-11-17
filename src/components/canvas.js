@@ -1455,15 +1455,8 @@ const sketch = p5 => {
     p5.strokeWeight(10);
     p5.stroke(curr_color);
     p5.line(p5.mouseX, p5.mouseY, p5.pmouseX, p5.pmouseY);
-<<<<<<< HEAD
     var currpoint = new otherPoint(p5.mouseX, p5.mouseY);
     points.push(currpoint);
-    ////console.log(currpoint)
-    ////console.log(points)
-=======
-    var currpoint = new otherPoint(p5.mouseX, p5.mouseY)
-    points.push(currpoint)
->>>>>>> master
     //prevX = p5.pmouseX;
     //prevY = p5.pmouseY;
     //drawings[drawings.length-1].update();
@@ -1482,26 +1475,15 @@ const sketch = p5 => {
 
   p5.mouseReleased = () => {
     //strokes.push(points) // dont push strokes here as an array, push the object it gets recognized
-<<<<<<< HEAD
-    result = _r.Recognize(points);
-    console.log(result);
-    lilstroke.shape = result.Name;
-    console.log("HERE IS THE LIL SHAPE");
+    if (points.length > 10) {
+      result = _r.Recognize(points);
+      lilstroke.shape = result.Name;
+    } else {
+      lilstroke.shape = "No Match.";
+    }
+
     console.log(lilstroke.shape);
     strokes.push(lilstroke);
-    console.log(strokes);
-=======
-    if (points.length > 10){
-      result = _r.Recognize(points)
-      lilstroke.shape = result.Name
-    }
-    else{
-      lilstroke.shape = "No Match."
-    }
-    
-    console.log(lilstroke.shape)
-    strokes.push(lilstroke)
->>>>>>> master
     //drawings.push(new Drawing(prevX, prevY, p5.mouseX, p5.mouseY));
     //console.log(drawings);
 
