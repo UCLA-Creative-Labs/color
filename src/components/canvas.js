@@ -10,7 +10,6 @@ var sc = 0;           // stroke count
 var redo_possible = false;	// determines if possible to redo or not
 var currentEvent, prevEvent;
 var movement_x, movement_y, movement = 5; // base stroke width is 5
-var curr_color;
 var mu = false;       //mouse up
 
 document.documentElement.onmousemove=function(event){
@@ -133,14 +132,14 @@ function DollarRecognizer() // constructor
 			}
 		}
 		var t1 = Date.now();
-		return (u == -1) ? new Result("No match.", 0.0, t1-t0) : new Result(this.Unistrokes[u].Name, useProtractor ? 1.0 / b : 1.0 - b / HalfDiagonal, t1-t0);
+		return (u === -1) ? new Result("No match.", 0.0, t1-t0) : new Result(this.Unistrokes[u].Name, useProtractor ? 1.0 / b : 1.0 - b / HalfDiagonal, t1-t0);
 	}
 	this.AddGesture = function(name, points)
 	{
 		this.Unistrokes[this.Unistrokes.length] = new Unistroke(name, points); // append new unistroke
 		var num = 0;
 		for (var i = 0; i < this.Unistrokes.length; i++) {
-			if (this.Unistrokes[i].Name == name)
+			if (this.Unistrokes[i].Name === name)
 				num++;
 		}
 		return num;
@@ -173,7 +172,7 @@ function Resample(points, n)
 		}
 		else D += d;
 	}
-	if (newpoints.length == n - 1) // somtimes we fall a rounding-error short of adding the last point, so add it if so
+	if (newpoints.length === n - 1) // somtimes we fall a rounding-error short of adding the last point, so add it if so
 		newpoints[newpoints.length] = new Point(points[points.length - 1].X, points[points.length - 1].Y);
 	return newpoints;
 }
@@ -227,8 +226,8 @@ function Vectorize(points) // for Protractor
 		sum += points[i].X * points[i].X + points[i].Y * points[i].Y;
 	}
 	var magnitude = Math.sqrt(sum);
-	for (var i = 0; i < vector.length; i++)
-		vector[i] /= magnitude;
+	for (var j = 0; j < vector.length; j++)
+		vector[j] /= magnitude;
 	return vector;
 }
 function OptimalCosineDistance(v1, v2) // for Protractor
@@ -428,6 +427,8 @@ const sketch = p5 => {
       case "J":
         curr_color = p5.color(color_options.scheme_3[1]);
         break;
+       default:
+       	break;
     }
     
 
