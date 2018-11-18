@@ -16,8 +16,10 @@ const scale = ["C5", "B4", "A4", "G4", "F4", "E4", "D4", "C4"];
 
 var lines = []; // all lines
 var line_count = []; // stores number of lines for every stroke
+let temp_line = []; // stores last 'undo' line
 var lc = 0; // line count for current stroke
 var sc = 0; // stroke count
+var redo_possible = false; // determines if possible to redo or not
 var currentEvent, prevEvent;
 var movement_x,
   movement_y,
@@ -1532,9 +1534,24 @@ const sketch = p5 => {
 
     if (p5.key === "D" || p5.key === "d") {
       if (lines.length > 0 && mu) {
+        //add deleted lines to deleted_lines array
+        temp_line = lines.slice(
+          lines.length - line_count[sc - 1],
+          lines.length
+        ); //store last stroke in temp array
         lines.splice(lines.length - line_count[sc - 1], line_count[sc - 1]); //remove Drawing from array
         sc--;
+        redo_possible = true;
+
         p5.clear();
+      }
+    }
+
+    if (p5.key === "Q" || p5.key === "q") {
+      if (redo_possible && mu) {
+        lines = lines.concat(temp_line); //add line back to lines array
+        redo_possible = false;
+        sc++;
       }
     }
   };
