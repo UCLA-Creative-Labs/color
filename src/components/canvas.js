@@ -1165,7 +1165,7 @@ function DollarRecognizer() {
       }
     }
     var t1 = Date.now();
-    return u == -1
+    return u === -1
       ? new Result("No match.", 0.0, t1 - t0)
       : new Result(
           this.Unistrokes[u].Name,
@@ -1177,7 +1177,7 @@ function DollarRecognizer() {
     this.Unistrokes[this.Unistrokes.length] = new Unistroke(name, points); // append new unistroke
     var num = 0;
     for (var i = 0; i < this.Unistrokes.length; i++) {
-      if (this.Unistrokes[i].Name == name) num++;
+      if (this.Unistrokes[i].Name === name) num++;
     }
     return num;
   };
@@ -1206,7 +1206,7 @@ function Resample(points, n) {
       D = 0.0;
     } else D += d;
   }
-  if (newpoints.length == n - 1)
+  if (newpoints.length === n - 1)
     // somtimes we fall a rounding-error short of adding the last point, so add it if so
     newpoints[newpoints.length] = new Point(
       points[points.length - 1].X,
@@ -1263,7 +1263,7 @@ function Vectorize(points) {
     sum += points[i].X * points[i].X + points[i].Y * points[i].Y;
   }
   var magnitude = Math.sqrt(sum);
-  for (var i = 0; i < vector.length; i++) vector[i] /= magnitude;
+  for (var j = 0; j < vector.length; j++) vector[j] /= magnitude;
   return vector;
 }
 function OptimalCosineDistance(v1, v2) {
@@ -1529,6 +1529,8 @@ const sketch = p5 => {
         break;
       case "J":
         curr_color = p5.color(color_options.scheme_3[1]);
+        break;
+      default:
         break;
     }
 
