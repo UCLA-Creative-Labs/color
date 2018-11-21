@@ -1364,8 +1364,6 @@ function brushStroke(x, y) {
   this.shape = "No Match.";
 }
 
-//var strokes = []
-
 const sketch = p5 => {
   let curr_color;
   var points = [];
@@ -1373,9 +1371,6 @@ const sketch = p5 => {
   var _r = new DollarRecognizer();
   var lilstroke;
   var result;
-  //let prevX;
-  //let prevY;
-  //let md = false; //mouse dragged
 
   //array of Grid objects
   let gridArr = [];
