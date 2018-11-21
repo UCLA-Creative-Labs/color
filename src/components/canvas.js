@@ -1386,7 +1386,7 @@ const sketch = p5 => {
       this.boundary_ystart = boundaries.ystart;
       this.boundary_yend = boundaries.yend;
       // sound init
-      this.synth = new Tone.Synth().toMaster();
+      this.synth = new Tone.MembraneSynth().toMaster();
       this.note_freq = note_freq;
     }
 
