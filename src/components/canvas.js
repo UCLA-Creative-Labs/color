@@ -351,14 +351,33 @@ const sketch = p5 => {
     curr_color = p5.color("#000000");
   };
 
-  p5.draw = () => {
-    for (var i = 0; i < lines.length; i++) {
-      lines[i].drawLine();
-    }
-  };
+	p5.draw = () => {
+				p5.clear();
+				for (var i = 0; i < lines.length; i++) {
+					p5.strokeWeight(lines[i].weight);
+		      p5.stroke(lines[i].color);
+					var mag1 = Math.sqrt(Math.pow(lines[i].x- p5.mouseX,2)+Math.pow(lines[i].y- p5.mouseY,2));
+					var mag2 = Math.sqrt(Math.pow(lines[i].px - p5.mouseX,2)+Math.pow(lines[i].py - p5.mouseY,2));
+					var mult = 9 + i/10;
+					var div1 = 1 + mult + mag1;
+					var div2 = 1 + mult + mag2;
+
+					// if the mouse is close to a point of a line, the point will 
+					// move be drawn close to the mouse
+
+		      p5.line((lines[i].x * (1+mag1) + mult * p5.mouseX) / div1, 
+		                (lines[i].y * (1+mag1) + mult * p5.mouseY) / div1, 
+		                (lines[i].px * (1+mag2) + mult * p5.mouseX) / div2, 
+		                (lines[i].py * (1+mag2) + mult * p5.mouseY) / div2);
+				  }
+			};
+		
 
   p5.mousePressed = () => {
-    points = []
+		points = []
+		movement_x = 5;
+		movement_y = 5;
+		movement = 5;
     lilstroke = new brushStroke(p5.mouseX, p5.mouseY)
     // prevX = p5.pmouseX;
     // prevY = p5.pmouseY;
@@ -406,7 +425,13 @@ const sketch = p5 => {
     switch (p5.key) {
       case "R":
       case "r":
-        p5.clear();
+				lines = [];       // all lines
+        line_count = [];  // stores number of lines for every stroke
+				temp_line = [];		// stores last 'undo' line
+				lc = 0;           // line count for current stroke
+				sc = 0;           // stroke count
+				redo_possible = false;
+				p5.clear();
         curr_color = p5.color("#000000");
         break;
       case "T":
