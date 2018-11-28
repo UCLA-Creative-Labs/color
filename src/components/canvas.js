@@ -1386,7 +1386,13 @@ const sketch = p5 => {
       this.boundary_ystart = boundaries.ystart;
       this.boundary_yend = boundaries.yend;
       // sound init
-      this.synth = new Tone.MembraneSynth().toMaster();
+      let poly = new Tone.PolySynth();
+      let membrane = new Tone.MembraneSynth();
+      let fm = new Tone.FMSynth();
+
+      //choose which instrument to play
+      this.synth = poly;
+
       this.note_freq = note_freq;
     }
 
@@ -1424,7 +1430,8 @@ const sketch = p5 => {
           ystart: (windowHeight * j) / 8,
           yend: (windowHeight * (j + 1)) / 8
         },
-        scale[j]
+        scale[j],
+        curr_color
       );
       //push to grid array
       gridArr.push(g);
