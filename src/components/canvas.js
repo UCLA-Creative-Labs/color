@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import P5Wrapper from "react-p5-wrapper";
 import Tone from "tone";
+import SampleLibrary from "./Tonejs-Instruments.js";
 
 // window dimensions
 let windowHeight = window.innerHeight;
@@ -1386,7 +1387,12 @@ const sketch = p5 => {
       this.boundary_ystart = boundaries.ystart;
       this.boundary_yend = boundaries.yend;
       // sound init
-      this.synth = new Tone.MembraneSynth().toMaster();
+      this.synth = new SampleLibrary.load({
+  		instruments: "piano",
+  		baseUrl: "/color/src/components/samples/"
+  		});
+      this.synth.toMaster();
+      console.log(this.synth);
       this.note_freq = note_freq;
     }
 
@@ -1400,7 +1406,9 @@ const sketch = p5 => {
     }
 
     play_sound() {
-      this.synth.triggerAttackRelease(this.note_freq, note_duration);
+    	console.log(this.note_freq);
+    	this.synth.triggerAttack(Tone.Frequency(this.note_freq).toNote());
+      // this.synth.triggerAttackRelease(this.note_freq, note_duration);
     }
   }
 
