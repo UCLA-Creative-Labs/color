@@ -18,7 +18,9 @@ class Button extends Component {
       OnClick,
       ButtonText,
       OnMouseEnter,
-      OnMouseLeave
+      OnMouseLeave,
+      OnMouseDown,
+      OnMouseUp
     } = this.props;
 
     return (
@@ -27,6 +29,8 @@ class Button extends Component {
         onClick={OnClick}
         onMouseEnter={OnMouseEnter}
         onMouseLeave={OnMouseLeave}
+        onMouseDown={OnMouseDown}
+        onMouseUp={OnMouseUp}
       >
         <img src={ImgSrc} />
         {ButtonText}

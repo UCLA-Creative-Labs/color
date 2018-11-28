@@ -8,25 +8,68 @@ class App extends Component {
     super();
 
     this.state = {
-      isShowing: false
+      isShowing: false,
+      undo: false,
+      redo: false
     };
   }
 
   openModalHandler = () => {
     this.setState({
-      isShowing: true
+      isShowing: true,
+      undo: this.state.undo,
+      redo: this.state.redo
     });
   };
 
   closeModalHandler = () => {
     this.setState({
-      isShowing: false
+      isShowing: false,
+      undo: this.state.undo,
+      redo: this.state.redo
     });
   };
 
   activate(text) {
     alert(text);
   }
+
+  UndoUp = () => {
+    this.setState({
+      isShowing: this.state.isShowing,
+      undo: false,
+      redo: this.state.redo
+    });
+    //console.log("undoup");
+    //console.log(this.state);
+  };
+
+  UndoDown = () => {
+    this.setState({
+      isShowing: this.state.isShowing,
+      undo: true,
+      redo: this.state.redo
+    });
+    //console.log("undodown");
+    //console.log(this.state);
+  };
+
+  RedoUp = () => {
+    this.setState({
+      isShowing: this.state.isShowing,
+      undo: this.state.undo,
+      redo: false
+    });
+    //console.log(this.state);
+  };
+
+  RedoDown = () => {
+    this.setState({
+      isShowing: this.state.isShowing,
+      undo: this.state.undo,
+      redo: true
+    });
+  };
 
   render() {
     return (
@@ -39,6 +82,16 @@ class App extends Component {
           OnMouseEnter={this.openModalHandler}
           OnMouseLeave={this.closeModalHandler}
           ButtonText="?"
+        />
+        <Button
+          OnMouseDown={this.UndoDown}
+          OnMouseUp={this.UndoUp}
+          ButtonText="Undo"
+        />
+        <Button
+          OnMouseDown={this.RedoDown}
+          OnMouseUp={this.RedoUp}
+          ButtonText="Redo"
         />
         <Modal
           className="modal"
@@ -60,6 +113,8 @@ class App extends Component {
           onmousemove="mouseMoveEvent(event.clientX, event.clientY, event.button)"
           onmouseup="mouseUpEvent(event.clientX, event.clientY, event.button)"
           oncontextmenu="return false;"
+          undo={this.state.undo}
+          redo={this.state.redo}
         >
           <span style="background-color:#ffff88;">
             The &lt;canvas&gt; element is not supported by this browser.

@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import P5Wrapper from "react-p5-wrapper";
 import Tone from "tone";
+//import { createButton } from "../../node_modules/react-p5-wrapper/node_modules/p5/lib/addons/p5.dom";
 
 // window dimensions
 let windowHeight = window.innerHeight;
@@ -11,9 +12,6 @@ let curr_color;
 // note scale must be backwards
 const note_duration = "4n";
 const scale = ["C5", "B4", "A4", "G4", "F4", "E4", "D4", "C4"];
-
-//import dollar from "./dollar.js";
-
 var lines = []; // all lines
 var line_count = []; // stores number of lines for every stroke
 let temp_line = []; // stores last 'undo' line
@@ -1364,56 +1362,62 @@ function brushStroke(x, y) {
   this.shape = "No Match.";
 }
 
-const sketch = p5 => {
-  let curr_color;
-  var points = [];
-  var strokes = [];
-  var _r = new DollarRecognizer();
-  var lilstroke;
-  var result;
+// sketch vars
+let points = [];
+let strokes = [];
+let _r = new DollarRecognizer();
+let lilstroke;
+let result;
+// array of Grid objects
+let gridArr = [];
+// stroke start location
+let stroke_start;
+// color schemes
+const color_options = {
+  scheme_1: ["#94EBD8", "#00B349"],
+  scheme_2: ["#983275", "#FF6F01"],
+  scheme_3: ["#C3A706", "#329290"]
+};
 
-  //array of Grid objects
-  let gridArr = [];
-
-  //stroke start location
-  let stroke_start;
-
-  // grid class
-  class Grid {
-    constructor(boundaries, note_freq) {
-      this.boundary_xstart = boundaries.xstart;
-      this.boundary_xend = boundaries.xend;
-      this.boundary_ystart = boundaries.ystart;
-      this.boundary_yend = boundaries.yend;
-      // sound init
-      this.synth = new Tone.MembraneSynth().toMaster();
-      this.note_freq = note_freq;
-    }
-
-    check_bound(x, y) {
-      return (
-        x >= this.boundary_xstart &&
-        x <= this.boundary_xend &&
-        y >= this.boundary_ystart &&
-        y <= this.boundary_yend
-      );
-    }
-
-    play_sound() {
-      this.synth.triggerAttackRelease(this.note_freq, note_duration);
-    }
+// grid class
+class Grid {
+  constructor(boundaries, note_freq) {
+    this.boundary_xstart = boundaries.xstart;
+    this.boundary_xend = boundaries.xend;
+    this.boundary_ystart = boundaries.ystart;
+    this.boundary_yend = boundaries.yend;
+    // sound init
+    this.synth = new Tone.MembraneSynth().toMaster();
+    this.note_freq = note_freq;
   }
 
-  // color schemes
-  const color_options = {
-    scheme_1: ["#94EBD8", "#00B349"],
-    scheme_2: ["#983275", "#FF6F01"],
-    scheme_3: ["#C3A706", "#329290"]
-  };
+  check_bound(x, y) {
+    return (
+      x >= this.boundary_xstart &&
+      x <= this.boundary_xend &&
+      y >= this.boundary_ystart &&
+      y <= this.boundary_yend
+    );
+  }
 
+  play_sound() {
+    this.synth.triggerAttackRelease(this.note_freq, note_duration);
+  }
+}
+
+const sketch = p5 => {
   p5.setup = () => {
+    // create canvas and set default color
     p5.createCanvas(p5.windowWidth, p5.windowHeight);
     curr_color = p5.color("#000000");
+
+    /*
+    // create undo and redo buttons
+    let undo_button = createButton("Undo");
+    let redo_button = createButton("Redo");
+    undo_button.mousePressed(Undo);
+		redo_button.mousePressed(Redo);
+		*/
 
     //initialize Grid objects
     for (let j = 0; j < 8; j++) {
@@ -1481,8 +1485,6 @@ const sketch = p5 => {
 
     console.log(lilstroke.shape);
     strokes.push(lilstroke);
-    //drawings.push(new Drawing(prevX, prevY, p5.mouseX, p5.mouseY));
-    //console.log(drawings);
 
     line_count[sc] = lc;
     sc++;
@@ -1528,8 +1530,10 @@ const sketch = p5 => {
       default:
         break;
     }
+  };
 
-    if (p5.key === "D" || p5.key === "d") {
+  p5.myCustomRedrawAccordingToNewPropsHandler = function(props) {
+    if (props.undo) {
       if (lines.length > 0 && mu) {
         //add deleted lines to deleted_lines array
         temp_line = lines.slice(
@@ -1539,12 +1543,11 @@ const sketch = p5 => {
         lines.splice(lines.length - line_count[sc - 1], line_count[sc - 1]); //remove Drawing from array
         sc--;
         redo_possible = true;
-
         p5.clear();
       }
     }
 
-    if (p5.key === "Q" || p5.key === "q") {
+    if (props.redo) {
       if (redo_possible && mu) {
         lines = lines.concat(temp_line); //add line back to lines array
         redo_possible = false;
@@ -1569,8 +1572,17 @@ const sketch = p5 => {
   }
 };
 
-function Canvas(props) {
-  return <P5Wrapper sketch={sketch} />;
+// Canvas component
+class Canvas extends Component {
+  constructor() {
+    super();
+    this.state = {};
+  }
+
+  render() {
+    const { undo, redo } = this.props;
+    return <P5Wrapper sketch={sketch} undo={undo} redo={redo} />;
+  }
 }
 
 export default Canvas;
