@@ -14,9 +14,9 @@ const scale = ["C5", "B4", "A4", "G4", "F4", "E4", "D4", "C4"];
 
 //import dollar from "./dollar.js";
 
-var lines = []; // all lines
-var line_count = []; // stores number of lines for every stroke
-let temp_line = []; // stores last 'undo' line
+var lines = [];       // stores all lines
+var line_count = [];  // stores the number of lines for every stroke
+let temp_line = [];   // stores the last 'undo' line
 var lc = 0; // line count for current stroke
 var sc = 0; // stroke count
 var redo_possible = false; // determines if possible to redo or not
@@ -1430,13 +1430,16 @@ const sketch = p5 => {
       gridArr.push(g);
     }
   };
-
+  
+  // p5.draw is called every frame. It goes through all lines in the lines array and draws it out
   p5.draw = () => {
     for (var i = 0; i < lines.length; i++) {
       lines[i].drawLine();
     }
   };
 
+  // line count (lc) is reset when the mouse is pressed to start counting the number lines for a new stroke
+  // mouse up (mu) is set to false. This prevents undoing while drawing
   p5.mousePressed = () => {
     // store stroke start for playing at end of stroke
     stroke_start = [p5.mouseX, p5.mouseY];
@@ -1449,25 +1452,25 @@ const sketch = p5 => {
   };
 
   p5.mouseDragged = () => {
-    p5.strokeWeight(10);
-    p5.stroke(curr_color);
-    p5.line(p5.mouseX, p5.mouseY, p5.pmouseX, p5.pmouseY);
+    //p5.strokeWeight(10);
+    //p5.stroke(curr_color);
+    //p5.line(p5.mouseX, p5.mouseY, p5.pmouseX, p5.pmouseY);
     var currpoint = new otherPoint(p5.mouseX, p5.mouseY);
     points.push(currpoint);
     //prevX = p5.pmouseX;
     //prevY = p5.pmouseY;
     //drawings[drawings.length-1].update();
-    lines.push(
+    lines.push( //as the mouse is dragged, new lines are stored in the lines array
       new Line(
-        p5.mouseX,
+        p5.mouseX,  //current frame mouse position
         p5.mouseY,
-        p5.pmouseX,
+        p5.pmouseX, //previous frame mouse position
         p5.pmouseY,
-        movement,
+        movement,   //movement is the velocity of the mouse. It's used to determine the stroke width of the line
         curr_color
       )
     );
-    lc++;
+    lc++; //increment the line count with each line pushed into the lines array
   };
 
   p5.mouseReleased = () => {
@@ -1484,10 +1487,10 @@ const sketch = p5 => {
     //drawings.push(new Drawing(prevX, prevY, p5.mouseX, p5.mouseY));
     //console.log(drawings);
 
-    line_count[sc] = lc;
-    sc++;
-    mu = true;
-    movement = 5;
+    line_count[sc] = lc;  //add the line count of the previous stroke into the line_count array
+    sc++; //increment the stroke count
+    mu = true;  //mouse up is now true. Undo option is available
+    //movement = 5;
 
     // check stroke click and play both sounds
     gridArr.forEach(element => {
@@ -1536,8 +1539,8 @@ const sketch = p5 => {
           lines.length - line_count[sc - 1],
           lines.length
         ); //store last stroke in temp array
-        lines.splice(lines.length - line_count[sc - 1], line_count[sc - 1]); //remove Drawing from array
-        sc--;
+        lines.splice(lines.length - line_count[sc - 1], line_count[sc - 1]); //remove last stroke from array
+        sc--; //decrement stroke count
         redo_possible = true;
 
         p5.clear();
@@ -1561,7 +1564,7 @@ const sketch = p5 => {
     this.weight = weight;
     this.color = color;
 
-    this.drawLine = () => {
+    this.drawLine = () => {     //used to draw line onto canvas
       p5.strokeWeight(weight);
       p5.stroke(color);
       p5.line(this.x, this.y, this.px, this.py);
