@@ -1446,6 +1446,7 @@ const sketch = p5 => {
     // prevY = p5.pmouseY;
     mu = false;
     lc = 0;
+    redo_possible = false;
   };
 
   p5.mouseDragged = () => {
