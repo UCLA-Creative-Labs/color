@@ -25,6 +25,7 @@ var movement_x,
   movement_y,
   movement = 5; // base stroke width is 5
 var mu = false; //mouse up
+let instrument = "";
 
 document.documentElement.onmousemove = function(event) {
   currentEvent = event;
@@ -1386,7 +1387,8 @@ const sketch = p5 => {
       this.boundary_ystart = boundaries.ystart;
       this.boundary_yend = boundaries.yend;
       // sound init
-      this.synth = new Tone.MembraneSynth().toMaster();
+      this.synth = new Tone.PolySynth().toMaster();
+
       this.note_freq = note_freq;
     }
 
@@ -1401,6 +1403,27 @@ const sketch = p5 => {
 
     play_sound() {
       this.synth.triggerAttackRelease(this.note_freq, note_duration);
+    }
+
+    change_instrument(instrument) {
+    	let poly = new Tone.PolySynth();
+      	let membrane = new Tone.MembraneSynth();
+      	let fm = new Tone.FMSynth();
+
+      	switch(instrument){
+      		case "poly":
+      			this.synth = poly.toMaster();
+      			break;
+      		case "membrane":
+      			this.synth = membrane.toMaster();
+      			break;
+      		case "fm":
+      			this.synth = fm.toMaster();
+      			break;
+      		default:
+      			this.synth = poly.toMaster();
+      			break;
+      	}
     }
   }
 
@@ -1507,28 +1530,40 @@ const sketch = p5 => {
       case "r":
         p5.clear();
         curr_color = p5.color("#000000");
+        instrument = "poly";
         break;
       case "T":
         curr_color = p5.color(color_options.scheme_1[0]);
+        instrument = "poly";
         break;
       case "G":
         curr_color = p5.color(color_options.scheme_1[1]);
+        instrument = "poly";
         break;
       case "Y":
         curr_color = p5.color(color_options.scheme_2[0]);
+        instrument = "membrane";
         break;
       case "H":
         curr_color = p5.color(color_options.scheme_2[1]);
+        instrument = "membrane";
         break;
       case "U":
         curr_color = p5.color(color_options.scheme_3[0]);
+        instrument = "fm";
         break;
       case "J":
         curr_color = p5.color(color_options.scheme_3[1]);
+        instrument = "fm";
         break;
       default:
         break;
     }
+
+    for (var k = 0; k < gridArr.length; k++){
+    	gridArr[k].change_instrument(instrument);
+    }
+
 
     if (p5.key === "D" || p5.key === "d") {
       if (lines.length > 0 && mu) {
