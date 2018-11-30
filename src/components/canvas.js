@@ -1402,20 +1402,21 @@ const sketch = p5 => {
     }
 
     play_sound() {
+      console.log(note_duration);
       this.synth.triggerAttackRelease(this.note_freq, note_duration);
     }
 
     change_instrument(instrument) {
     	let poly = new Tone.PolySynth();
-      	let membrane = new Tone.MembraneSynth();
+      	let guitar = new Tone.PluckSynth({resonance: 0.99});
       	let fm = new Tone.FMSynth();
 
       	switch(instrument){
       		case "poly":
       			this.synth = poly.toMaster();
       			break;
-      		case "membrane":
-      			this.synth = membrane.toMaster();
+      		case "guitar":
+      			this.synth = guitar.toMaster();
       			break;
       		case "fm":
       			this.synth = fm.toMaster();
@@ -1542,11 +1543,11 @@ const sketch = p5 => {
         break;
       case "Y":
         curr_color = p5.color(color_options.scheme_2[0]);
-        instrument = "membrane";
+        instrument = "guitar";
         break;
       case "H":
         curr_color = p5.color(color_options.scheme_2[1]);
-        instrument = "membrane";
+        instrument = "guitar";
         break;
       case "U":
         curr_color = p5.color(color_options.scheme_3[0]);
