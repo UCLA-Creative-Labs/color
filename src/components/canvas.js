@@ -1413,16 +1413,16 @@ const sketch = p5 => {
 
       	switch(instrument){
       		case "piano":
-      			this.synth = poly.toMaster();
+      			this.synth = piano.toMaster();
       			break;
       		case "guitar":
       			this.synth = guitar.toMaster();
       			break;
       		case "harmonica":
-      			this.synth = fm.toMaster();
+      			this.synth = harmonica.toMaster();
       			break;
       		default:
-      			this.synth = poly.toMaster();
+      			this.synth = piano.toMaster();
       			break;
       	}
     }
