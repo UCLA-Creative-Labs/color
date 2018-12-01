@@ -1252,7 +1252,6 @@ function TranslateTo(points, pt) {
     newpoints[newpoints.length] = new Point(qx, qy);
   }
   return newpoints;
-
 }
 function Vectorize(points) {
   // for Protractor
@@ -1404,27 +1403,27 @@ class Grid {
     );
   }
 
-    change_instrument(instrument) {
-    	  let piano = new Tone.PolySynth();
-        let guitar = new Tone.PluckSynth({resonance: 0.99});
-        let harmonica = new Tone.FMSynth({harmonicity: 2});
+  change_instrument(instrument) {
+    let piano = new Tone.PolySynth();
+    let guitar = new Tone.PluckSynth({ resonance: 0.99 });
+    let harmonica = new Tone.FMSynth({ harmonicity: 2 });
 
-      	switch(instrument){
-      		case "piano":
-      			this.synth = piano.toMaster();
-      			break;
-      		case "guitar":
-      			this.synth = guitar.toMaster();
-      			break;
-      		case "harmonica":
-      			this.synth = harmonica.toMaster();
-      			break;
-      		default:
-      			this.synth = piano.toMaster();
-      			break;
-      	}
+    switch (instrument) {
+      case "piano":
+        this.synth = piano.toMaster();
+        break;
+      case "guitar":
+        this.synth = guitar.toMaster();
+        break;
+      case "harmonica":
+        this.synth = harmonica.toMaster();
+        break;
+      default:
+        this.synth = piano.toMaster();
+        break;
     }
-  
+  }
+
   play_sound() {
     this.synth.triggerAttackRelease(this.note_freq, note_duration);
   }
@@ -1516,12 +1515,6 @@ const sketch = p5 => {
 
   p5.keyPressed = () => {
     switch (p5.key) {
-      case "R":
-      case "r":
-        p5.clear();
-        curr_color = p5.color("#000000");
-        instrument = "piano";
-        break;
       case "T":
         curr_color = p5.color(color_options.scheme_1[0]);
         instrument = "piano";
@@ -1548,13 +1541,13 @@ const sketch = p5 => {
         break;
       default:
         break;
-
     }
 
-    for (var k = 0; k < gridArr.length; k++){
-    	gridArr[k].change_instrument(instrument);
+    for (var k = 0; k < gridArr.length; k++) {
+      gridArr[k].change_instrument(instrument);
     }
 
+    // undo
     if (p5.key === "D" || p5.key === "d") {
       if (lines.length > 0 && mu) {
         //add deleted lines to deleted_lines array
@@ -1569,13 +1562,23 @@ const sketch = p5 => {
       }
     }
 
-
+    // redo
     if (p5.key === "Q" || p5.key === "q") {
       if (redo_possible && mu) {
         lines = lines.concat(temp_line); //add line back to lines array
         redo_possible = false;
         sc++;
       }
+    }
+
+    // reset
+    if (p5.key === "R" || p5.key === "r") {
+      // clear the lines array --> remove all drawings from screen
+      lines.length = 0;
+      p5.clear();
+      // reset color to black (default)
+      curr_color = p5.color("#000000");
+      instrument = "piano";
     }
   };
 
