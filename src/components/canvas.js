@@ -1407,18 +1407,18 @@ const sketch = p5 => {
     }
 
     change_instrument(instrument) {
-    	let poly = new Tone.PolySynth();
-      	let guitar = new Tone.PluckSynth({resonance: 0.99});
-      	let fm = new Tone.FMSynth();
+    	  let piano = new Tone.PolySynth();
+        let guitar = new Tone.PluckSynth({resonance: 0.99});
+        let harmonica = new Tone.FMSynth({harmonicity: 2});
 
       	switch(instrument){
-      		case "poly":
+      		case "piano":
       			this.synth = poly.toMaster();
       			break;
       		case "guitar":
       			this.synth = guitar.toMaster();
       			break;
-      		case "fm":
+      		case "harmonica":
       			this.synth = fm.toMaster();
       			break;
       		default:
@@ -1531,15 +1531,15 @@ const sketch = p5 => {
       case "r":
         p5.clear();
         curr_color = p5.color("#000000");
-        instrument = "poly";
+        instrument = "piano";
         break;
       case "T":
         curr_color = p5.color(color_options.scheme_1[0]);
-        instrument = "poly";
+        instrument = "piano";
         break;
       case "G":
         curr_color = p5.color(color_options.scheme_1[1]);
-        instrument = "poly";
+        instrument = "piano";
         break;
       case "Y":
         curr_color = p5.color(color_options.scheme_2[0]);
@@ -1551,11 +1551,11 @@ const sketch = p5 => {
         break;
       case "U":
         curr_color = p5.color(color_options.scheme_3[0]);
-        instrument = "fm";
+        instrument = "harmonica";
         break;
       case "J":
         curr_color = p5.color(color_options.scheme_3[1]);
-        instrument = "fm";
+        instrument = "harmonica";
         break;
       default:
         break;
