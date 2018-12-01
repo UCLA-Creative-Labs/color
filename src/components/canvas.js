@@ -1513,15 +1513,34 @@ const sketch = p5 => {
     mu = true;
     movement = 5;
 
-    // check stroke click and play both sounds
-    gridArr.forEach(element => {
-      if (element.check_bound(p5.mouseX, p5.mouseY)) {
-        element.play_sound();
-      }
-      if (element.check_bound(stroke_start[0], stroke_start[1])) {
-        element.play_sound();
-      }
-    });
+    
+    let poly = new Tone.PolySynth();
+    let guitar = new Tone.PluckSynth({resonance: 0.99});
+    let fm = new Tone.MetalSynth();
+    let synth = new Tone.PolySynth().toMaster();
+    if(lilstroke.shape == "triangle"){
+      synth = fm.toMaster();
+      synth.triggerAttackRelease(scale[8], note_duration);
+
+    }else if (lilstroke.shape == "circle"){
+      synth = poly.toMaster();
+      synth.triggerAttackRelease(scale[3], note_duration);
+
+    }else if(lilstroke.shape == "rectangle"){
+      synth = guitar.toMaster();
+      synth.triggerAttackRelease(scale[5], note_duration);
+
+    }else {
+      // check stroke click and play both sounds
+      gridArr.forEach(element => {
+        if (element.check_bound(p5.mouseX, p5.mouseY)) {
+          element.play_sound();
+        }
+        if (element.check_bound(stroke_start[0], stroke_start[1])) {
+          element.play_sound();
+        }
+      });
+    }
   };
 
   p5.keyPressed = () => {
