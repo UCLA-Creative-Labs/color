@@ -11,6 +11,7 @@ let curr_color;
 // note scale must be backwards
 const note_duration = "4n";
 const scale = ["C5", "B4", "A4", "G4", "F4", "E4", "D4", "C4"];
+
 var lines = []; // all lines
 var line_count = []; // stores number of lines for every stroke
 let temp_line = []; // stores last 'undo' line
@@ -22,6 +23,8 @@ var movement_x,
   movement_y,
   movement = 5; // base stroke width is 5
 var mu = false; //mouse up
+
+let instrument = "";
 
 document.documentElement.onmousemove = function(event) {
   currentEvent = event;
@@ -1249,6 +1252,7 @@ function TranslateTo(points, pt) {
     newpoints[newpoints.length] = new Point(qx, qy);
   }
   return newpoints;
+
 }
 function Vectorize(points) {
   // for Protractor
@@ -1311,6 +1315,7 @@ function Centroid(points) {
   y /= points.length;
   return new Point(x, y);
 }
+
 function BoundingBox(points) {
   var minX = +Infinity,
     maxX = -Infinity,
@@ -1399,6 +1404,7 @@ class Grid {
     );
   }
 
+
   play_sound() {
     this.synth.triggerAttackRelease(this.note_freq, note_duration);
   }
@@ -1466,6 +1472,7 @@ const sketch = p5 => {
     lilstroke = new brushStroke(p5.mouseX, p5.mouseY);
     mu = false;
     lc = 0;
+    redo_possible = false;
   };
 
   p5.mouseDragged = () => {
@@ -1493,30 +1500,42 @@ const sketch = p5 => {
       case "r":
         p5.clear();
         curr_color = p5.color("#000000");
+        instrument = "poly";
         break;
       case "T":
         curr_color = p5.color(color_options.scheme_1[0]);
+        instrument = "poly";
         break;
       case "G":
         curr_color = p5.color(color_options.scheme_1[1]);
+        instrument = "poly";
         break;
       case "Y":
         curr_color = p5.color(color_options.scheme_2[0]);
+        instrument = "guitar";
         break;
       case "H":
         curr_color = p5.color(color_options.scheme_2[1]);
+        instrument = "guitar";
         break;
       case "U":
         curr_color = p5.color(color_options.scheme_3[0]);
+        instrument = "fm";
         break;
       case "J":
         curr_color = p5.color(color_options.scheme_3[1]);
+        instrument = "fm";
         break;
       default:
         break;
+
     }
 
-    if (p5.key === "d" || p5.key === "D") {
+    for (var k = 0; k < gridArr.length; k++){
+    	gridArr[k].change_instrument(instrument);
+    }
+
+    if (p5.key === "D" || p5.key === "d") {
       if (lines.length > 0 && mu) {
         //add deleted lines to deleted_lines array
         temp_line = lines.slice(
@@ -1530,7 +1549,8 @@ const sketch = p5 => {
       }
     }
 
-    if (p5.key === "q" || p5.key === "Q") {
+
+    if (p5.key === "Q" || p5.key === "q") {
       if (redo_possible && mu) {
         lines = lines.concat(temp_line); //add line back to lines array
         redo_possible = false;

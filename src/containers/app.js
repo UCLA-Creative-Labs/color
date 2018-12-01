@@ -8,25 +8,19 @@ class App extends Component {
     super();
 
     this.state = {
-      isShowing: false,
-      undo: false,
-      redo: false
+      isShowing: false
     };
   }
 
   openModalHandler = () => {
     this.setState({
-      isShowing: true,
-      undo: this.state.undo,
-      redo: this.state.redo
+      isShowing: true
     });
   };
 
   closeModalHandler = () => {
     this.setState({
-      isShowing: false,
-      undo: this.state.undo,
-      redo: this.state.redo
+      isShowing: false
     });
   };
 
