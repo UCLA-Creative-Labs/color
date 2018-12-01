@@ -1514,6 +1514,55 @@ const sketch = p5 => {
     lc++;
   };
 
+  p5.mouseReleased = () => {
+    //strokes.push(points) // dont push strokes here as an array, push the object it gets recognized
+    if (points.length > 10) {
+      result = _r.Recognize(points);
+      lilstroke.shape = result.Name;
+    } else {
+      lilstroke.shape = "No Match.";
+    }
+
+    console.log(lilstroke.shape);
+    strokes.push(lilstroke);
+    //drawings.push(new Drawing(prevX, prevY, p5.mouseX, p5.mouseY));
+    //console.log(drawings);
+
+    line_count[sc] = lc;
+    sc++;
+    mu = true;
+    movement = 5;
+
+    
+    let poly = new Tone.PolySynth();
+    let guitar = new Tone.PluckSynth({resonance: 0.99});
+    let fm = new Tone.MetalSynth();
+    let synth = new Tone.PolySynth().toMaster();  //random declaration of synth
+    if(lilstroke.shape == "triangle"){
+      synth = fm.toMaster();
+      synth.triggerAttackRelease(scale[8], note_duration);
+
+    }else if (lilstroke.shape == "circle"){
+      synth = poly.toMaster();
+      synth.triggerAttackRelease(scale[3], note_duration);
+
+    }else if(lilstroke.shape == "rectangle"){
+      synth = guitar.toMaster();
+      synth.triggerAttackRelease(scale[5], note_duration);
+
+    }else {
+      // check stroke click and play both sounds
+      gridArr.forEach(element => {
+        if (element.check_bound(p5.mouseX, p5.mouseY)) {
+          element.play_sound();
+        }
+        if (element.check_bound(stroke_start[0], stroke_start[1])) {
+          element.play_sound();
+        }
+      });
+    }
+  };
+
   p5.keyPressed = () => {
     switch (p5.key) {
       case "R":
