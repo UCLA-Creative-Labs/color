@@ -1543,13 +1543,13 @@ const sketch = p5 => {
     let guitar = new Tone.PluckSynth({ resonance: 0.99 });
     let fm = new Tone.MetalSynth();
     let synth = new Tone.PolySynth().toMaster(); //random declaration of synth
-    if (lilstroke.shape == "triangle") {
+    if (lilstroke.shape === "triangle") {
       synth = fm.toMaster();
       synth.triggerAttackRelease(scale[8], note_duration);
-    } else if (lilstroke.shape == "circle") {
+    } else if (lilstroke.shape === "circle") {
       synth = poly.toMaster();
       synth.triggerAttackRelease(scale[3], note_duration);
-    } else if (lilstroke.shape == "rectangle") {
+    } else if (lilstroke.shape === "rectangle") {
       synth = guitar.toMaster();
       synth.triggerAttackRelease(scale[5], note_duration);
     } else {
