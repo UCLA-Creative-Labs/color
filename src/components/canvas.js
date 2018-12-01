@@ -1391,7 +1391,7 @@ class Grid {
     this.boundary_ystart = boundaries.ystart;
     this.boundary_yend = boundaries.yend;
     // sound init
-    this.synth = new Tone.MembraneSynth().toMaster();
+    this.synth = new Tone.PolySynth().toMaster();
     this.note_freq = note_freq;
   }
 
