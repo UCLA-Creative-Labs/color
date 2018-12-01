@@ -1,7 +1,10 @@
 import React, { Component } from "react";
 import P5Wrapper from "react-p5-wrapper";
 import Tone from "tone";
-//import { createButton } from "../../node_modules/react-p5-wrapper/node_modules/p5/lib/addons/p5.dom";
+
+//import "p5";
+//import "p5/lib/addons/p5.dom";
+import "react-p5-wrapper/node_modules/p5/lib/addons/p5.dom";
 
 // window dimensions
 let windowHeight = window.innerHeight;
@@ -1406,18 +1409,77 @@ class Grid {
 }
 
 const sketch = p5 => {
-  p5.setup = () => {
-    // create canvas and set default color
-    p5.createCanvas(p5.windowWidth, p5.windowHeight);
-    curr_color = p5.color("#000000");
+  function Undo() {
+    if (lines.length > 0 && mu) {
+      //add deleted lines to deleted_lines array
+      temp_line = lines.slice(lines.length - line_count[sc - 1], lines.length); //store last stroke in temp array
+      lines.splice(lines.length - line_count[sc - 1], line_count[sc - 1]); //remove Drawing from array
+      sc--;
+      redo_possible = true;
+      p5.clear();
+      console.log(sc);
+      console.log(lines);
+    }
+  }
+  function Redo() {
+    if (redo_possible && mu) {
+      lines = lines.concat(temp_line); //add line back to lines array
+      redo_possible = false;
+      sc++;
+    }
+  }
+  function canvas_mouse_pressed() {
+    // store stroke start for playing at end of stroke
+    stroke_start = [p5.mouseX, p5.mouseY];
+    points = [];
+    lilstroke = new brushStroke(p5.mouseX, p5.mouseY);
+    mu = false;
+    lc = 0;
+  }
 
-    /*
+  // not fired when mouse release in canvas --> might be because highlighting buttons --> remove buttons (?)
+  function canvas_mouse_released() {
+    //strokes.push(points) // dont push strokes here as an array, push the object it gets recognized
+    if (points.length > 10) {
+      result = _r.Recognize(points);
+      lilstroke.shape = result.Name;
+    } else {
+      lilstroke.shape = "No Match.";
+    }
+    console.log(lilstroke.shape);
+    strokes.push(lilstroke);
+
+    line_count[sc] = lc;
+    sc++;
+    mu = true;
+    movement = 5;
+
+    // check stroke click and play both sounds
+    gridArr.forEach(element => {
+      if (element.check_bound(p5.mouseX, p5.mouseY)) {
+        element.play_sound();
+      }
+      if (element.check_bound(stroke_start[0], stroke_start[1])) {
+        element.play_sound();
+      }
+    });
+
+    console.log(sc);
+  }
+
+  p5.setup = () => {
     // create undo and redo buttons
-    let undo_button = createButton("Undo");
-    let redo_button = createButton("Redo");
+    let undo_button = p5.createButton("Undo");
+    let redo_button = p5.createButton("Redo");
     undo_button.mousePressed(Undo);
-		redo_button.mousePressed(Redo);
-		*/
+    redo_button.mousePressed(Redo);
+
+    // create canvas and set default color
+    let main_canvas = p5.createCanvas(p5.windowWidth, p5.windowHeight);
+    main_canvas.mousePressed(canvas_mouse_pressed);
+    main_canvas.mouseReleased(canvas_mouse_released);
+
+    curr_color = p5.color("#000000");
 
     //initialize Grid objects
     for (let j = 0; j < 8; j++) {
@@ -1441,26 +1503,12 @@ const sketch = p5 => {
     }
   };
 
-  p5.mousePressed = () => {
-    // store stroke start for playing at end of stroke
-    stroke_start = [p5.mouseX, p5.mouseY];
-    points = [];
-    lilstroke = new brushStroke(p5.mouseX, p5.mouseY);
-    // prevX = p5.pmouseX;
-    // prevY = p5.pmouseY;
-    mu = false;
-    lc = 0;
-  };
-
   p5.mouseDragged = () => {
     p5.strokeWeight(10);
     p5.stroke(curr_color);
     p5.line(p5.mouseX, p5.mouseY, p5.pmouseX, p5.pmouseY);
     var currpoint = new otherPoint(p5.mouseX, p5.mouseY);
     points.push(currpoint);
-    //prevX = p5.pmouseX;
-    //prevY = p5.pmouseY;
-    //drawings[drawings.length-1].update();
     lines.push(
       new Line(
         p5.mouseX,
@@ -1472,34 +1520,6 @@ const sketch = p5 => {
       )
     );
     lc++;
-  };
-
-  p5.mouseReleased = () => {
-    //strokes.push(points) // dont push strokes here as an array, push the object it gets recognized
-    if (points.length > 10) {
-      result = _r.Recognize(points);
-      lilstroke.shape = result.Name;
-    } else {
-      lilstroke.shape = "No Match.";
-    }
-
-    console.log(lilstroke.shape);
-    strokes.push(lilstroke);
-
-    line_count[sc] = lc;
-    sc++;
-    mu = true;
-    movement = 5;
-
-    // check stroke click and play both sounds
-    gridArr.forEach(element => {
-      if (element.check_bound(p5.mouseX, p5.mouseY)) {
-        element.play_sound();
-      }
-      if (element.check_bound(stroke_start[0], stroke_start[1])) {
-        element.play_sound();
-      }
-    });
   };
 
   p5.keyPressed = () => {
@@ -1530,10 +1550,8 @@ const sketch = p5 => {
       default:
         break;
     }
-  };
 
-  p5.myCustomRedrawAccordingToNewPropsHandler = function(props) {
-    if (props.undo) {
+    if (p5.key === "d" || p5.key === "D") {
       if (lines.length > 0 && mu) {
         //add deleted lines to deleted_lines array
         temp_line = lines.slice(
@@ -1544,10 +1562,11 @@ const sketch = p5 => {
         sc--;
         redo_possible = true;
         p5.clear();
+        console.log(sc);
       }
     }
 
-    if (props.redo) {
+    if (p5.key === "q" || p5.key === "Q") {
       if (redo_possible && mu) {
         lines = lines.concat(temp_line); //add line back to lines array
         redo_possible = false;
@@ -1580,8 +1599,7 @@ class Canvas extends Component {
   }
 
   render() {
-    const { undo, redo } = this.props;
-    return <P5Wrapper sketch={sketch} undo={undo} redo={redo} />;
+    return <P5Wrapper sketch={sketch} />;
   }
 }
 
