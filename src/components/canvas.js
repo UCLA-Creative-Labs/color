@@ -27,10 +27,12 @@ var mu = false; //mouse up
 let instrument = "";
 
 //for saving sounds
-let synthArray = [];  //hold synthesizers
+let s_synthArray = [];  //hold synthesizers
+let e_synthArray = [];
 let s_freqArray = []; //holds notes played for start sound
 let e_freqArray = []; //holds notes played for end sound
-let tempSynth;
+let s_tempSynth;
+let e_tempSynth;
 let temp_s_freq;
 let temp_e_freq;
 
@@ -1558,8 +1560,7 @@ const sketch = p5 => {
           element.play_sound();
 
           //add synth to array
-          synthArray.push(element.synth);
-          console.log(synthArray);
+          e_synthArray.push(element.synth);
           //add frequency to array
           e_freqArray.push(element.note_freq);
           console.log(e_freqArray);
@@ -1567,8 +1568,11 @@ const sketch = p5 => {
         if (element.check_bound(stroke_start[0], stroke_start[1])) {
           element.play_sound();
 
+          //add synth to array
+          s_synthArray.push(element.synth);
           //add frequency to array
           s_freqArray.push(element.note_freq);
+          console.log(s_freqArray);
         }
       });
     }
@@ -1622,8 +1626,8 @@ const sketch = p5 => {
         p5.clear();
 
         //remove sound from synthArray
-        tempSynth = synthArray.pop();
-        console.log(synthArray);
+        s_tempSynth = s_synthArray.pop();
+        e_tempSynth = e_synthArray.pop();
 
         //remove frequencies from both freqArrays
         temp_s_freq = s_freqArray.pop();
@@ -1639,8 +1643,8 @@ const sketch = p5 => {
         sc++;
 
         //add back tempSynth
-        synthArray.push(tempSynth);
-        console.log(synthArray);
+        s_synthArray.push(s_tempSynth);
+        e_synthArray.push(s_tempSynth);
 
         //add back both freqs to freqArrays
         s_freqArray.push(temp_s_freq);
@@ -1667,10 +1671,12 @@ const sketch = p5 => {
 
       //dealing with playing sounds
       it = 0;
-      synthArray = [];
+      s_synthArray = [];
+      e_synthArray = [];
       s_freqArray = [];
       e_freqArray = [];
-      synthArray.length = 0;
+      s_synthArray.length = 0;
+      e_synthArray.length = 0;
       s_freqArray.length = 0;
       e_freqArray.length = 0;
     }
@@ -1678,7 +1684,7 @@ const sketch = p5 => {
     // play sounds
     if (p5.key === " "){
       console.log("playing all sounds");
-      if (synthArray.length > 0){
+      if (s_synthArray.length > 0){
         playAllSounds();
         it = 0;
       }
@@ -1688,10 +1694,12 @@ const sketch = p5 => {
   let it = 0;
   function playAllSounds(){
     setTimeout(function() {
-      synthArray[it].triggerAttackRelease(s_freqArray[it], note_duration);
-      synthArray[it].triggerAttackRelease(e_freqArray[it], note_duration);
+      e_synthArray[it].triggerAttackRelease(e_freqArray[it], note_duration);
+      console.log("playing e");
+      s_synthArray[it].triggerAttackRelease(s_freqArray[it], note_duration);
+      console.log("playing s");
       it++;
-      if (it < synthArray.length){
+      if (it < s_synthArray.length){
         playAllSounds();
       }
     }, 800);
