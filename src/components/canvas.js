@@ -2,10 +2,6 @@ import React, { Component } from "react";
 import P5Wrapper from "react-p5-wrapper";
 import Tone from "tone";
 
-//import "p5";
-//import "p5/lib/addons/p5.dom";
-import "react-p5-wrapper/node_modules/p5/lib/addons/p5.dom";
-
 // window dimensions
 let windowHeight = window.innerHeight;
 let windowWidth = window.innerWidth;
@@ -1409,36 +1405,34 @@ class Grid {
 }
 
 const sketch = p5 => {
-  function Undo() {
-    if (lines.length > 0 && mu) {
-      //add deleted lines to deleted_lines array
-      temp_line = lines.slice(lines.length - line_count[sc - 1], lines.length); //store last stroke in temp array
-      lines.splice(lines.length - line_count[sc - 1], line_count[sc - 1]); //remove Drawing from array
-      sc--;
-      redo_possible = true;
-      p5.clear();
-      console.log(sc);
-      console.log(lines);
-    }
-  }
-  function Redo() {
-    if (redo_possible && mu) {
-      lines = lines.concat(temp_line); //add line back to lines array
-      redo_possible = false;
-      sc++;
-    }
-  }
-  function canvas_mouse_pressed() {
-    // store stroke start for playing at end of stroke
-    stroke_start = [p5.mouseX, p5.mouseY];
-    points = [];
-    lilstroke = new brushStroke(p5.mouseX, p5.mouseY);
-    mu = false;
-    lc = 0;
-  }
+  p5.setup = () => {
+    // create canvas and set default color
+    p5.createCanvas(p5.windowWidth, p5.windowHeight);
+    curr_color = p5.color("#000000");
 
-  // not fired when mouse release in canvas --> might be because highlighting buttons --> remove buttons (?)
-  function canvas_mouse_released() {
+    //initialize Grid objects
+    for (let j = 0; j < 8; j++) {
+      const g = new Grid(
+        {
+          xstart: 0,
+          xend: windowWidth,
+          ystart: (windowHeight * j) / 8,
+          yend: (windowHeight * (j + 1)) / 8
+        },
+        scale[j]
+      );
+      //push to grid array
+      gridArr.push(g);
+    }
+  };
+
+  p5.draw = () => {
+    for (var i = 0; i < lines.length; i++) {
+      lines[i].drawLine();
+    }
+  };
+
+  p5.mouseReleased = () => {
     //strokes.push(points) // dont push strokes here as an array, push the object it gets recognized
     if (points.length > 10) {
       result = _r.Recognize(points);
@@ -1463,44 +1457,15 @@ const sketch = p5 => {
         element.play_sound();
       }
     });
-
-    console.log(sc);
-  }
-
-  p5.setup = () => {
-    // create undo and redo buttons
-    let undo_button = p5.createButton("Undo");
-    let redo_button = p5.createButton("Redo");
-    undo_button.mousePressed(Undo);
-    redo_button.mousePressed(Redo);
-
-    // create canvas and set default color
-    let main_canvas = p5.createCanvas(p5.windowWidth, p5.windowHeight);
-    main_canvas.mousePressed(canvas_mouse_pressed);
-    main_canvas.mouseReleased(canvas_mouse_released);
-
-    curr_color = p5.color("#000000");
-
-    //initialize Grid objects
-    for (let j = 0; j < 8; j++) {
-      const g = new Grid(
-        {
-          xstart: 0,
-          xend: windowWidth,
-          ystart: (windowHeight * j) / 8,
-          yend: (windowHeight * (j + 1)) / 8
-        },
-        scale[j]
-      );
-      //push to grid array
-      gridArr.push(g);
-    }
   };
 
-  p5.draw = () => {
-    for (var i = 0; i < lines.length; i++) {
-      lines[i].drawLine();
-    }
+  p5.mousePressed = () => {
+    // store stroke start for playing at end of stroke
+    stroke_start = [p5.mouseX, p5.mouseY];
+    points = [];
+    lilstroke = new brushStroke(p5.mouseX, p5.mouseY);
+    mu = false;
+    lc = 0;
   };
 
   p5.mouseDragged = () => {
@@ -1562,7 +1527,6 @@ const sketch = p5 => {
         sc--;
         redo_possible = true;
         p5.clear();
-        console.log(sc);
       }
     }
 
