@@ -26,6 +26,14 @@ var mu = false; //mouse up
 
 let instrument = "";
 
+//for saving sounds
+let synthArray = [];  //hold synthesizers
+let s_freqArray = []; //holds notes played for start sound
+let e_freqArray = []; //holds notes played for end sound
+let tempSynth;
+let temp_s_freq;
+let temp_e_freq;
+
 document.documentElement.onmousemove = function(event) {
   currentEvent = event;
 };
@@ -1452,53 +1460,25 @@ const sketch = p5 => {
   };
 
 	p5.draw = () => {
-				p5.clear();
-				for (var i = 0; i < lines.length; i++) {
-					p5.strokeWeight(lines[i].weight);
-		      p5.stroke(lines[i].color);
-					var mag1 = Math.sqrt(Math.pow(lines[i].x- p5.mouseX,2)+Math.pow(lines[i].y- p5.mouseY,2));
-					var mag2 = Math.sqrt(Math.pow(lines[i].px - p5.mouseX,2)+Math.pow(lines[i].py - p5.mouseY,2));
-					var mult = 9 + i/10;
-					var div1 = 1 + mult + mag1;
-					var div2 = 1 + mult + mag2;
+		p5.clear();
+		for (var i = 0; i < lines.length; i++) {
+			p5.strokeWeight(lines[i].weight);
+      p5.stroke(lines[i].color);
+			var mag1 = Math.sqrt(Math.pow(lines[i].x- p5.mouseX,2)+Math.pow(lines[i].y- p5.mouseY,2));
+			var mag2 = Math.sqrt(Math.pow(lines[i].px - p5.mouseX,2)+Math.pow(lines[i].py - p5.mouseY,2));
+			var mult = 9 + i/10;
+			var div1 = 1 + mult + mag1;
+			var div2 = 1 + mult + mag2;
 
-					// if the mouse is close to a point of a line, the point will 
-					// move be drawn close to the mouse
+			// if the mouse is close to a point of a line, the point will 
+			// move be drawn close to the mouse
 
-		      p5.line((lines[i].x * (1+mag1) + mult * p5.mouseX) / div1, 
-		                (lines[i].y * (1+mag1) + mult * p5.mouseY) / div1, 
-		                (lines[i].px * (1+mag2) + mult * p5.mouseX) / div2, 
-		                (lines[i].py * (1+mag2) + mult * p5.mouseY) / div2);
-				  }
-			};
-		
-
-  p5.mouseReleased = () => {
-    //strokes.push(points) // dont push strokes here as an array, push the object it gets recognized
-    if (points.length > 10) {
-      result = _r.Recognize(points);
-      lilstroke.shape = result.Name;
-    } else {
-      lilstroke.shape = "No Match.";
-    }
-    console.log(lilstroke.shape);
-    strokes.push(lilstroke);
-
-    line_count[sc] = lc;
-    sc++;
-    mu = true;
-    movement = 5;
-
-    // check stroke click and play both sounds
-    gridArr.forEach(element => {
-      if (element.check_bound(p5.mouseX, p5.mouseY)) {
-        element.play_sound();
-      }
-      if (element.check_bound(stroke_start[0], stroke_start[1])) {
-        element.play_sound();
-      }
-    });
-  };
+      p5.line((lines[i].x * (1+mag1) + mult * p5.mouseX) / div1, 
+                (lines[i].y * (1+mag1) + mult * p5.mouseY) / div1, 
+                (lines[i].px * (1+mag2) + mult * p5.mouseX) / div2, 
+                (lines[i].py * (1+mag2) + mult * p5.mouseY) / div2);
+		  }
+	};
 
   p5.mousePressed = () => {
 		points = []
@@ -1573,11 +1553,22 @@ const sketch = p5 => {
     } else {
       // check stroke click and play both sounds
       gridArr.forEach(element => {
+
         if (element.check_bound(p5.mouseX, p5.mouseY)) {
           element.play_sound();
+
+          //add synth to array
+          synthArray.push(element.synth);
+          console.log(synthArray);
+          //add frequency to array
+          e_freqArray.push(element.note_freq);
+          console.log(e_freqArray);
         }
         if (element.check_bound(stroke_start[0], stroke_start[1])) {
           element.play_sound();
+
+          //add frequency to array
+          s_freqArray.push(element.note_freq);
         }
       });
     }
@@ -1629,6 +1620,14 @@ const sketch = p5 => {
         sc--;
         redo_possible = true;
         p5.clear();
+
+        //remove sound from synthArray
+        tempSynth = synthArray.pop();
+        console.log(synthArray);
+
+        //remove frequencies from both freqArrays
+        temp_s_freq = s_freqArray.pop();
+        temp_e_freq = e_freqArray.pop();
       }
     }
 
@@ -1638,6 +1637,14 @@ const sketch = p5 => {
         lines = lines.concat(temp_line); //add line back to lines array
         redo_possible = false;
         sc++;
+
+        //add back tempSynth
+        synthArray.push(tempSynth);
+        console.log(synthArray);
+
+        //add back both freqs to freqArrays
+        s_freqArray.push(temp_s_freq);
+        e_freqArray.push(temp_e_freq);
       }
     }
 
@@ -1657,8 +1664,38 @@ const sketch = p5 => {
       // reset color to black (default)
       curr_color = p5.color("#000000");
       instrument = "piano";
+
+      //dealing with playing sounds
+      it = 0;
+      synthArray = [];
+      s_freqArray = [];
+      e_freqArray = [];
+      synthArray.length = 0;
+      s_freqArray.length = 0;
+      e_freqArray.length = 0;
+    }
+
+    // play sounds
+    if (p5.key === " "){
+      console.log("playing all sounds");
+      if (synthArray.length > 0){
+        playAllSounds();
+        it = 0;
+      }
     }
   };
+
+  let it = 0;
+  function playAllSounds(){
+    setTimeout(function() {
+      synthArray[it].triggerAttackRelease(s_freqArray[it], note_duration);
+      synthArray[it].triggerAttackRelease(e_freqArray[it], note_duration);
+      it++;
+      if (it < synthArray.length){
+        playAllSounds();
+      }
+    }, 800);
+  }
 
   function Line(x, y, px, py, weight, color) {
     this.x = x;
