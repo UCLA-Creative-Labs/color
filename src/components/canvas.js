@@ -12,11 +12,146 @@ let curr_color;
 const note_duration = "4n";
 const scale = ["C5", "B4", "A4", "G4", "F4", "E4", "D4", "C4"];
 
+function record_sound(){
+      
+  const audio = document.querySelector('audio');
+  const synth = new Tone.PolySynth(2, Tone.Synth);
+  const actx  = Tone.context;
+  const dest  = actx.createMediaStreamDestination();
+  const recorder = new MediaRecorder(dest.stream);
+
+  synth.connect(dest);
+  //this.synth.connect(dest);
+  synth.toMaster();
+  //this.synth.toMaster();
+
+  const chunks = [];
+
+  const notes = 'CDEFGA'.split('').map(n => `${n}4`);
+
+  let note = 0;
+  Tone.Transport.scheduleRepeat(time => {
+    // if (note === 0) recorder.start();
+    // if (note > sc) {
+    //   synth.triggerRelease(time);
+    //   recorder.stop();
+    //   Tone.Transport.stop();
+    // }
+    // else synth.triggerAttack([sounds[note].x, sounds[note].y], time);
+    // note++;
+
+    if (note > notes.length) {
+      //synth.triggerRelease(time)
+      synth.releaseAll(time)
+      //this.synth.triggerRelease(time)
+      recorder.stop();
+      Tone.Transport.stop();
+    } else synth.triggerAttack(notes[note], time, 0.2);
+    //this.synth.triggerAttack(notes[note], time);
+    note++;
+    
+  }
+  , '4n'
+  );
+
+  recorder.ondataavailable = evt => chunks.push(evt.data);
+  recorder.onstop = evt => {
+    let blob = new Blob(chunks, { type: 'audio/ogg; codecs=opus' });
+    var audioURL = window.URL.createObjectURL(blob);
+    audio.src = audioURL;
+  };
+
+  Tone.Transport.start();
+
+};
+
+// var record = document.querySelector('.record');
+// var stop = document.querySelector('.stop');
+// var soundClips = document.querySelector('.sound-clips');
+
+// if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+//   console.log('getUserMedia supported.');
+//   navigator.mediaDevices.getUserMedia (
+//      // constraints - only audio needed for this app
+//      {
+//         audio: true
+//      })
+
+//      // Success callback
+//      .then(function(stream) {
+//       var mediaRecorder = new MediaRecorder(stream);
+
+//       record.onclick = function() {
+//         mediaRecorder.start(1000);
+//         console.log(mediaRecorder.state);
+//         console.log("recorder started");
+//         record.style.background = "red";
+//         record.style.color = "black";
+//       }
+      
+//       var chunks = [];
+      
+//       mediaRecorder.ondataavailable = function(e) {
+//         chunks.push(e.data);
+//       }
+      
+//       stop.onclick = function() {
+//         mediaRecorder.stop();
+//         console.log(mediaRecorder.state);
+//         console.log("recorder stopped");
+//         record.style.background = "";
+//         record.style.color = "";
+//       }
+      
+//       MediaRecorder.onstop = function(e) {
+//         console.log("recorder stopped");
+      
+//         var clipName = prompt('Enter a name for your sound clip');
+      
+//         var clipContainer = document.createElement('article');
+//         var clipLabel = document.createElement('p');
+//         var audio = document.createElement('audio');
+//         var deleteButton = document.createElement('button');
+                 
+//         clipContainer.classList.add('clip');
+//         audio.setAttribute('controls', '');
+//         deleteButton.innerHTML = "Delete";
+//         clipLabel.innerHTML = clipName;
+      
+//         clipContainer.appendChild(audio);
+//         clipContainer.appendChild(clipLabel);
+//         clipContainer.appendChild(deleteButton);
+//         soundClips.appendChild(clipContainer);
+      
+//         var blob = new Blob(chunks, { 'type' : 'audio/ogg; codecs=opus' });
+//         var chunks = [];
+//         var audioURL = window.URL.createObjectURL(blob);
+//         audio.src = audioURL;
+      
+//         deleteButton.onclick = function(e) {
+//           var evtTgt = e.target;
+//           evtTgt.parentNode.parentNode.removeChild(evtTgt.parentNode);
+//         }
+//       }
+       
+//      })
+
+//      // Error callback
+//      .catch(function(err) {
+//         console.log('The following getUserMedia error occured: ' + err);
+//      }
+//   );
+// } else {
+//   console.log('getUserMedia not supported on your browser!');
+// }
+
+
 //import dollar from "./dollar.js";
 
 var lines = []; // all lines
 var line_count = []; // stores number of lines for every stroke
 let temp_line = []; // stores last 'undo' line
+var sounds = [];
 var lc = 0; // line count for current stroke
 var sc = 0; // stroke count
 var redo_possible = false; // determines if possible to redo or not
@@ -1372,6 +1507,10 @@ const sketch = p5 => {
   var lilstroke;
   var result;
 
+  //variables used for recording functions
+  var notes = [];
+  var curNote;
+
   //array of Grid objects
   let gridArr = [];
 
@@ -1399,11 +1538,19 @@ const sketch = p5 => {
       );
     }
 
+    get_freq() {
+      return this.note_freq;
+    }
+
     play_sound() {
       this.synth.triggerAttackRelease(this.note_freq, note_duration);
     }
-  }
 
+    save_sound(s, e) {
+      sounds.push({x:s,y:e});
+    }    
+    
+  }
   // color schemes
   const color_options = {
     scheme_1: ["#94EBD8", "#00B349"],
@@ -1444,8 +1591,8 @@ const sketch = p5 => {
     lilstroke = new brushStroke(p5.mouseX, p5.mouseY);
     // prevX = p5.pmouseX;
     // prevY = p5.pmouseY;
-    mu = false;
-    lc = 0;
+    mu = false; //mouse released
+    lc = 0; //start at 0 to count the p5 lines per stroke
   };
 
   p5.mouseDragged = () => {
@@ -1467,7 +1614,7 @@ const sketch = p5 => {
         curr_color
       )
     );
-    lc++;
+    lc++; 
   };
 
   p5.mouseReleased = () => {
@@ -1484,19 +1631,26 @@ const sketch = p5 => {
     //drawings.push(new Drawing(prevX, prevY, p5.mouseX, p5.mouseY));
     //console.log(drawings);
 
+    //sc is the index
     line_count[sc] = lc;
     sc++;
-    mu = true;
+    mu = true; //mouse released true
     movement = 5;
 
     // check stroke click and play both sounds
     gridArr.forEach(element => {
+      var startsound;
+      var endsound;
       if (element.check_bound(p5.mouseX, p5.mouseY)) {
         element.play_sound();
+        startsound = element.get_freq();
       }
       if (element.check_bound(stroke_start[0], stroke_start[1])) {
         element.play_sound();
+        endsound = element.get_freq();
       }
+      element.save_sound(startsound, endsound);
+      //element.record_sound();
     });
   };
 
@@ -1530,12 +1684,14 @@ const sketch = p5 => {
     }
 
     if (p5.key === "D" || p5.key === "d") {
+      //if there is a line and the mouse isnt being held down
       if (lines.length > 0 && mu) {
         //add deleted lines to deleted_lines array
         temp_line = lines.slice(
           lines.length - line_count[sc - 1],
           lines.length
         ); //store last stroke in temp array
+        //(start/length - end, end)
         lines.splice(lines.length - line_count[sc - 1], line_count[sc - 1]); //remove Drawing from array
         sc--;
         redo_possible = true;
@@ -1550,6 +1706,10 @@ const sketch = p5 => {
         redo_possible = false;
         sc++;
       }
+    }
+
+    if (p5.key === "P" || p5.key === "p") {
+      record_sound();
     }
   };
 

@@ -203,6 +203,7 @@ class App extends Component {
     return (
       <div className="App">
         <h1>Welcome to Color</h1>
+        <audio controls preload="auto"></audio>
         <Button>this is a button</Button>
         {this.state.isShowing ? (
           <div onMouseLeave={this.closeModalHandler} className="back-drop" />
