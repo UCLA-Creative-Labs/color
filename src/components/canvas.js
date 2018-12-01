@@ -12,8 +12,6 @@ let curr_color;
 const note_duration = "4n";
 const scale = ["C5", "B4", "A4", "G4", "F4", "E4", "D4", "C4"];
 
-//import dollar from "./dollar.js";
-
 var lines = []; // all lines
 var line_count = []; // stores number of lines for every stroke
 let temp_line = []; // stores last 'undo' line
@@ -25,6 +23,7 @@ var movement_x,
   movement_y,
   movement = 5; // base stroke width is 5
 var mu = false; //mouse up
+
 let instrument = "";
 
 document.documentElement.onmousemove = function(event) {
@@ -1253,6 +1252,7 @@ function TranslateTo(points, pt) {
     newpoints[newpoints.length] = new Point(qx, qy);
   }
   return newpoints;
+
 }
 function Vectorize(points) {
   // for Protractor
@@ -1315,6 +1315,7 @@ function Centroid(points) {
   y /= points.length;
   return new Point(x, y);
 }
+
 function BoundingBox(points) {
   var minX = +Infinity,
     maxX = -Infinity,
@@ -1365,46 +1366,43 @@ function brushStroke(x, y) {
   this.shape = "No Match.";
 }
 
-const sketch = p5 => {
-  let curr_color;
-  var points = [];
-  var strokes = [];
-  var _r = new DollarRecognizer();
-  var lilstroke;
-  var result;
+// sketch vars
+let points = [];
+let strokes = [];
+let _r = new DollarRecognizer();
+let lilstroke;
+let result;
+// array of Grid objects
+let gridArr = [];
+// stroke start location
+let stroke_start;
+// color schemes
+const color_options = {
+  scheme_1: ["#94EBD8", "#00B349"],
+  scheme_2: ["#983275", "#FF6F01"],
+  scheme_3: ["#C3A706", "#329290"]
+};
 
-  //array of Grid objects
-  let gridArr = [];
+// grid class
+class Grid {
+  constructor(boundaries, note_freq) {
+    this.boundary_xstart = boundaries.xstart;
+    this.boundary_xend = boundaries.xend;
+    this.boundary_ystart = boundaries.ystart;
+    this.boundary_yend = boundaries.yend;
+    // sound init
+    this.synth = new Tone.MembraneSynth().toMaster();
+    this.note_freq = note_freq;
+  }
 
-  //stroke start location
-  let stroke_start;
-
-  // grid class
-  class Grid {
-    constructor(boundaries, note_freq) {
-      this.boundary_xstart = boundaries.xstart;
-      this.boundary_xend = boundaries.xend;
-      this.boundary_ystart = boundaries.ystart;
-      this.boundary_yend = boundaries.yend;
-      // sound init
-      this.synth = new Tone.PolySynth().toMaster();
-
-      this.note_freq = note_freq;
-    }
-
-    check_bound(x, y) {
-      return (
-        x >= this.boundary_xstart &&
-        x <= this.boundary_xend &&
-        y >= this.boundary_ystart &&
-        y <= this.boundary_yend
-      );
-    }
-
-    play_sound() {
-      console.log(note_duration);
-      this.synth.triggerAttackRelease(this.note_freq, note_duration);
-    }
+  check_bound(x, y) {
+    return (
+      x >= this.boundary_xstart &&
+      x <= this.boundary_xend &&
+      y >= this.boundary_ystart &&
+      y <= this.boundary_yend
+    );
+  }
 
     change_instrument(instrument) {
     	  let piano = new Tone.PolySynth();
@@ -1426,16 +1424,15 @@ const sketch = p5 => {
       			break;
       	}
     }
+  
+  play_sound() {
+    this.synth.triggerAttackRelease(this.note_freq, note_duration);
   }
+}
 
-  // color schemes
-  const color_options = {
-    scheme_1: ["#94EBD8", "#00B349"],
-    scheme_2: ["#983275", "#FF6F01"],
-    scheme_3: ["#C3A706", "#329290"]
-  };
-
+const sketch = p5 => {
   p5.setup = () => {
+    // create canvas and set default color
     p5.createCanvas(p5.windowWidth, p5.windowHeight);
     curr_color = p5.color("#000000");
 
@@ -1461,40 +1458,6 @@ const sketch = p5 => {
     }
   };
 
-  p5.mousePressed = () => {
-    // store stroke start for playing at end of stroke
-    stroke_start = [p5.mouseX, p5.mouseY];
-    points = [];
-    lilstroke = new brushStroke(p5.mouseX, p5.mouseY);
-    // prevX = p5.pmouseX;
-    // prevY = p5.pmouseY;
-    mu = false;
-    lc = 0;
-    redo_possible = false;
-  };
-
-  p5.mouseDragged = () => {
-    p5.strokeWeight(10);
-    p5.stroke(curr_color);
-    p5.line(p5.mouseX, p5.mouseY, p5.pmouseX, p5.pmouseY);
-    var currpoint = new otherPoint(p5.mouseX, p5.mouseY);
-    points.push(currpoint);
-    //prevX = p5.pmouseX;
-    //prevY = p5.pmouseY;
-    //drawings[drawings.length-1].update();
-    lines.push(
-      new Line(
-        p5.mouseX,
-        p5.mouseY,
-        p5.pmouseX,
-        p5.pmouseY,
-        movement,
-        curr_color
-      )
-    );
-    lc++;
-  };
-
   p5.mouseReleased = () => {
     //strokes.push(points) // dont push strokes here as an array, push the object it gets recognized
     if (points.length > 10) {
@@ -1503,11 +1466,8 @@ const sketch = p5 => {
     } else {
       lilstroke.shape = "No Match.";
     }
-
     console.log(lilstroke.shape);
     strokes.push(lilstroke);
-    //drawings.push(new Drawing(prevX, prevY, p5.mouseX, p5.mouseY));
-    //console.log(drawings);
 
     line_count[sc] = lc;
     sc++;
@@ -1523,6 +1483,35 @@ const sketch = p5 => {
         element.play_sound();
       }
     });
+  };
+
+  p5.mousePressed = () => {
+    // store stroke start for playing at end of stroke
+    stroke_start = [p5.mouseX, p5.mouseY];
+    points = [];
+    lilstroke = new brushStroke(p5.mouseX, p5.mouseY);
+    mu = false;
+    lc = 0;
+    redo_possible = false;
+  };
+
+  p5.mouseDragged = () => {
+    p5.strokeWeight(10);
+    p5.stroke(curr_color);
+    p5.line(p5.mouseX, p5.mouseY, p5.pmouseX, p5.pmouseY);
+    var currpoint = new otherPoint(p5.mouseX, p5.mouseY);
+    points.push(currpoint);
+    lines.push(
+      new Line(
+        p5.mouseX,
+        p5.mouseY,
+        p5.pmouseX,
+        p5.pmouseY,
+        movement,
+        curr_color
+      )
+    );
+    lc++;
   };
 
   p5.keyPressed = () => {
@@ -1559,12 +1548,12 @@ const sketch = p5 => {
         break;
       default:
         break;
+
     }
 
     for (var k = 0; k < gridArr.length; k++){
     	gridArr[k].change_instrument(instrument);
     }
-
 
     if (p5.key === "D" || p5.key === "d") {
       if (lines.length > 0 && mu) {
@@ -1576,10 +1565,10 @@ const sketch = p5 => {
         lines.splice(lines.length - line_count[sc - 1], line_count[sc - 1]); //remove Drawing from array
         sc--;
         redo_possible = true;
-
         p5.clear();
       }
     }
+
 
     if (p5.key === "Q" || p5.key === "q") {
       if (redo_possible && mu) {
@@ -1606,8 +1595,16 @@ const sketch = p5 => {
   }
 };
 
-function Canvas(props) {
-  return <P5Wrapper sketch={sketch} />;
+// Canvas component
+class Canvas extends Component {
+  constructor() {
+    super();
+    this.state = {};
+  }
+
+  render() {
+    return <P5Wrapper sketch={sketch} />;
+  }
 }
 
 export default Canvas;
