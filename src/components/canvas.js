@@ -35,6 +35,9 @@ let s_tempSynth;
 let e_tempSynth;
 let temp_s_freq;
 let temp_e_freq;
+let it = 0;
+let curr_playing = false;
+let play_length = 0;
 
 document.documentElement.onmousemove = function(event) {
   currentEvent = event;
@@ -1671,6 +1674,7 @@ const sketch = p5 => {
 
       //dealing with playing sounds
       it = 0;
+      curr_playing = false;
       s_synthArray = [];
       e_synthArray = [];
       s_freqArray = [];
@@ -1685,22 +1689,45 @@ const sketch = p5 => {
     if (p5.key === " "){
       console.log("playing all sounds");
       if (s_synthArray.length > 0){
-        playAllSounds();
-        it = 0;
+        if (!curr_playing){
+          play_length = s_synthArray.length;
+          console.log(it);
+          if (it !== 0){
+            playAllSounds(it+1);
+          }
+          else{
+            playAllSounds(it);
+          }
+        }
+        else {
+          play_length = 0;
+        }
       }
     }
   };
 
-  let it = 0;
-  function playAllSounds(){
+  function playAllSounds(i){
     setTimeout(function() {
-      e_synthArray[it].triggerAttackRelease(e_freqArray[it], note_duration);
-      console.log("playing e");
-      s_synthArray[it].triggerAttackRelease(s_freqArray[it], note_duration);
-      console.log("playing s");
-      it++;
-      if (it < s_synthArray.length){
-        playAllSounds();
+      e_synthArray[i].triggerAttackRelease(e_freqArray[i], note_duration);
+      s_synthArray[i].triggerAttackRelease(s_freqArray[i], note_duration);
+      i++;
+      if (i < play_length){
+        curr_playing = true;
+        //end of synthArray, reset it to 0
+        if (i === s_synthArray.length-1){
+          console.log("made it here");
+          it = 0;
+          console.log(it);
+        }
+        else {
+          it = i;
+        }
+        console.log(curr_playing);
+        playAllSounds(i);
+      }
+      else {
+        curr_playing = false;
+        console.log(curr_playing);
       }
     }, 800);
   }
