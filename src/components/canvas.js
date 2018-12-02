@@ -39,6 +39,10 @@ let it = 0;
 let curr_playing = false;
 let play_length = 0;
 
+//for playback animation
+let pb_it = 0;
+let pb_sc = 0;
+
 document.documentElement.onmousemove = function(event) {
   currentEvent = event;
 };
@@ -1694,14 +1698,24 @@ const sketch = p5 => {
           console.log(it);
           if (it !== 0){
             playAllSounds(it+1);
+            playbackAnimation();
           }
           else{
             playAllSounds(it);
+            playbackAnimation();
           }
         }
         else {
           play_length = 0;
         }
+      }
+    }
+
+    //testing stroke width
+    if (p5.key === "M" || p5.key === "m"){
+      console.log("yeet");
+      for (var i = 0; i < lines.length; i++){
+        lines[i].weight = lines[i].weight * 1.5;
       }
     }
   };
@@ -1715,20 +1729,58 @@ const sketch = p5 => {
         curr_playing = true;
         //end of synthArray, reset it to 0
         if (i === s_synthArray.length-1){
-          console.log("made it here");
           it = 0;
-          console.log(it);
         }
         else {
           it = i;
         }
-        console.log(curr_playing);
         playAllSounds(i);
       }
       else {
         curr_playing = false;
-        console.log(curr_playing);
       }
+    }, 800);
+  }
+
+  let pb_start = 0;
+  let pb_prev_start = 0;
+  let pb_prev_end = 0;
+  function playbackAnimation(){
+    setTimeout(function() {
+      if (pb_sc === 0){
+        pb_start = 0;
+      }
+
+      if (pb_start !== 0){
+        //decrease strokeWeight of previous lines
+        for (var j = pb_prev_start; j < pb_prev_end; j++){
+          lines[j].weight /= 1.5;
+        }
+      }
+
+      //increase strokeWeight of lines
+      for (var i = pb_start; i < (pb_start + line_count[pb_sc]); i++){
+        lines[i].weight *= 1.5;
+      }
+
+      pb_prev_start = pb_start;
+      pb_prev_end = pb_start + line_count[pb_sc];
+
+      pb_start += line_count[pb_sc];
+      pb_sc++;
+      if (pb_sc >= sc){
+        console.log(pb_sc);
+        //wait 800 ms then decrease strokeWeight of last stroke
+        setTimeout(function(){
+          for (var k = pb_prev_start; k < pb_prev_end; k++){
+            lines[k].weight /= 1.5;
+          }
+        },800);
+        return;
+      }
+      else{
+        playbackAnimation();
+      } 
     }, 800);
   }
 
