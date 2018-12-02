@@ -10,6 +10,7 @@
     "react-emotion": "^9.2.12",
     "react-p5-wrapper": "^0.0.4",
     "react-scripts": "2.0.4",
+    "react-transition-group": "^2.5.0",
     "tone": "^0.12.80"
   },
   "scripts": {

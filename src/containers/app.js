@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Button from "../components/button";
 import Modal from "../components/modal/modal";
 import Canvas from "../components/canvas";
+import Landing from "../components/landing/landing";
 
 class App extends Component {
   constructor() {
@@ -31,7 +32,15 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <h1>Welcome to Color</h1>
+        <Landing />
+      </div>
+    );
+  }
+}
+
+export default App;
+
+/*
         {this.state.isShowing ? (
           <div onMouseLeave={this.closeModalHandler} className="back-drop" />
         ) : null}
@@ -65,9 +74,4 @@ class App extends Component {
             The &lt;canvas&gt; element is not supported by this browser.
           </span>
         </Canvas>
-      </div>
-    );
-  }
-}
-
-export default App;
+*/

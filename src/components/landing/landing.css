@@ -1,0 +1,93 @@
+@font-face {
+  font-family: crayon;
+  src: url(../../fonts/CrayonHandRegular2016Demo.ttf);
+}
+
+.landing_page {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  text-align: center;
+  display: table;
+  background-color: white;
+}
+
+.landing_page h1 {
+  display: table-cell;
+  vertical-align: middle;
+  font-size: 20vh;
+  font-family: crayon, "arial";
+  color: black;
+
+  -webkit-animation: fadeinout 5s forwards; /* Safari, Chrome and Opera > 12.1 */
+  -moz-animation: fadeinout 5s forwards; /* Firefox < 16 */
+  -ms-animation: fadeinout 5s forwards; /* Internet Explorer */
+  -o-animation: fadein 5s forwards; /* Opera < 12.1 */
+  animation: fadeinout 5s forwards;
+}
+
+@keyframes fadeinout {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Firefox < 16 */
+@-moz-keyframes fadeinout {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Safari, Chrome and Opera > 12.1 */
+@-webkit-keyframes fadeinout {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Internet Explorer */
+@-ms-keyframes fadeinout {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Opera < 12.1 */
+@-o-keyframes fadeinout {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
