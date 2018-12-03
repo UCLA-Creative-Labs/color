@@ -26,18 +26,52 @@ class Landing extends Component {
 
   render() {
     // page layouts
-    const landing_page_content = <h1>Color</h1>;
+    const landing_page_content = (
+      <h1>
+        <span id="color_1">C</span>
+        <span id="color_2">o</span>
+        <span id="color_3">l</span>
+        <span id="color_4">o</span>
+        <span id="color_5">r</span>
+      </h1>
+    );
     const description_page_content = (
       <div>
         <h2>
-          Turning colorful drawings into musical notes: a visuals music-alizer.
+          Turning <span id="colorful_1">c</span>
+          <span id="colorful_2">o</span>
+          <span id="colorful_3">l</span>
+          <span id="colorful_4">o</span>
+          <span id="colorful_5">r</span>
+          <span id="colorful_6">f</span>
+          <span id="colorful_7">u</span>
+          <span id="colorful_8">l</span> drawings into{" "}
+          <span id="musical_1">m</span>
+          <span id="musical_2">u</span>
+          <span id="musical_3">s</span>
+          <span id="musical_4">i</span>
+          <span id="musical_5">c</span>
+          <span id="musical_6">a</span>
+          <span id="musical_7">l</span> notes: a{" "}
+          <span id="visuals">visuals</span>{" "}
+          <span id="musicalizer">music-alizer</span>.
         </h2>
         <h2>
           Made with{" "}
           <span role="img" aria-label="heart">
             ❤️
           </span>{" "}
-          from Creative Labs
+          from <span id="creative_1">C</span>
+          <span id="creative_2">r</span>
+          <span id="creative_3">e</span>
+          <span id="creative_4">a</span>
+          <span id="creative_5">t</span>
+          <span id="creative_6">i</span>
+          <span id="creative_7">v</span>
+          <span id="creative_8">e</span> <span id="labs_1">L</span>
+          <span id="labs_2">a</span>
+          <span id="labs_3">b</span>
+          <span id="labs_4">s</span>
         </h2>
       </div>
     );

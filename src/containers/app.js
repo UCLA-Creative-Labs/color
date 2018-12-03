@@ -72,9 +72,7 @@ class App extends Component {
         </Canvas>
       </div>
     );
-
     const content = this.state.app_loaded ? app : landing;
-
     return <div className="App">{content}</div>;
   }
 }

@@ -140,11 +140,11 @@
   font-family: crayon, "arial";
   color: black;
 
-  -webkit-animation: fadeinout 5s forwards; /* Safari, Chrome and Opera > 12.1 */
-  -moz-animation: fadeinout 5s forwards; /* Firefox < 16 */
-  -ms-animation: fadeinout 5s forwards; /* Internet Explorer */
-  -o-animation: fadeinout 5s forwards; /* Opera < 12.1 */
-  animation: fadeinout 5s forwards;
+  -webkit-animation: fadeinout 7s forwards; /* Safari, Chrome and Opera > 12.1 */
+  -moz-animation: fadeinout 7s forwards; /* Firefox < 16 */
+  -ms-animation: fadeinout 7s forwards; /* Internet Explorer */
+  -o-animation: fadeinout 7s forwards; /* Opera < 12.1 */
+  animation: fadeinout 7s forwards;
 }
 
 /* description page div */
@@ -280,4 +280,86 @@
 
 #next_button_div button:focus {
   outline: none;
+}
+
+/* first landing page colors */
+#color_1 {
+  color: #f67280;
+}
+#color_2 {
+  color: #ffeb8c;
+}
+#color_3 {
+  color: #75d976;
+}
+#color_4 {
+  color: #68d9c6;
+}
+#color_5 {
+  color: #bc8ee5;
+}
+
+/* second landing page colors */
+#colorful_1,
+#colorful_6 {
+  color: #337ca0;
+}
+#colorful_2,
+#colorful_7 {
+  color: #3ec300;
+}
+#colorful_3,
+#colorful_8 {
+  color: #ffeb8c;
+}
+#colorful_4 {
+  color: #ff1d15;
+}
+#colorful_5 {
+  color: #e13700;
+}
+
+/* third landing page colors */
+#musical_1,
+#musical_6 {
+  color: #01295f;
+}
+#musical_2,
+#musical_7 {
+  color: #437f97;
+}
+#musical_3 {
+  color: #849324;
+}
+#musical_4 {
+  color: #ffb30f;
+}
+#musical_5 {
+  color: #fd151b;
+}
+
+/* visuals musicalizer colors */
+#visuals {
+  color: #ff8491;
+}
+#musicalizer {
+  color: #ff8491;
+}
+
+/* CL colors */
+#creative_1,
+#creative_3,
+#creative_5,
+#creative_7,
+#labs_1,
+#labs_3 {
+  color: #486bfd;
+}
+#creative_2,
+#creative_4,
+#creative_6,
+#creative_8,
+#labs_2,
+#labs_4 {
+  color: #ff9688;
 }
