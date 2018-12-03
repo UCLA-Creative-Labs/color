@@ -66,6 +66,7 @@ class Landing extends Component {
               <tr>H - Orange color</tr>
               <tr>U - Gold color</tr>
               <tr>J - Blue color</tr>
+              <tr>SPACE - Play/Pause sounds</tr>
             </table>
           </div>
         </div>
