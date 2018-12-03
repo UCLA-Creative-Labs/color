@@ -1778,6 +1778,39 @@ const sketch = p5 => {
         else{
           playbackAnimation(pb_i);
         } 
+      }
+      //add stroke to one more
+      else{
+        if (pb_start !== 0){
+          //decrease strokeWeight of previous lines
+          for (var j = pb_prev_start; j < pb_prev_end; j++){
+            lines[j].weight /= 1.5;
+          }
+        }
+
+        //increase strokeWeight of lines
+        for (var i = pb_start; i < (pb_start + line_count[pb_i]); i++){
+          lines[i].weight *= 1.5;
+        }
+
+        pb_prev_start = pb_start;
+        pb_prev_end = pb_start + line_count[pb_i];
+
+        pb_start += line_count[pb_i];
+        // pb_sc++;
+        pb_i++;
+        if (pb_i >= sc){
+          //wait 800 ms then decrease strokeWeight of last stroke
+          setTimeout(function(){
+            for (var k = pb_prev_start; k < pb_prev_end; k++){
+              lines[k].weight /= 1.5;
+            }
+          },800);
+          // pb_sc = 0;
+          pb_start = 0;
+          console.log("end");
+          return;
+        }
       } 
     }, 800);
   }
