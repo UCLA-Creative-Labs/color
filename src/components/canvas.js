@@ -1776,6 +1776,7 @@ const sketch = p5 => {
             lines[k].weight /= 1.5;
           }
         },800);
+        pb_sc = 0;
         return;
       }
       else{
