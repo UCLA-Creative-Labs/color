@@ -1468,6 +1468,7 @@ const sketch = p5 => {
     }
   };
 
+
 	p5.draw = () => {
 		p5.clear();
 		for (var i = 0; i < lines.length; i++) {
@@ -1490,11 +1491,11 @@ const sketch = p5 => {
 	};
 
   p5.mousePressed = () => {
-		points = []
-		movement_x = 5;
-		movement_y = 5;
-		movement = 5;
-    lilstroke = new brushStroke(p5.mouseX, p5.mouseY)
+    points = [];
+    movement_x = 5;
+    movement_y = 5;
+    movement = 5;
+    lilstroke = new brushStroke(p5.mouseX, p5.mouseY);
     // prevX = p5.pmouseX;
     // prevY = p5.pmouseY;
 
@@ -1663,14 +1664,14 @@ const sketch = p5 => {
     if ((p5.key === "R" || p5.key === "r") && !curr_playing) {
       // clear the lines array --> remove all drawings from screen
       lines.length = 0;
-      lines = [];       // all lines
-      line_count = [];  // stores number of lines for every stroke
+      lines = []; // all lines
+      line_count = []; // stores number of lines for every stroke
       line_count.length = 0;
-		  temp_line = [];		// stores last 'undo' line
+      temp_line = []; // stores last 'undo' line
       temp_line.length = 0;
-		  lc = 0;           // line count for current stroke
-			sc = 0;           // stroke count
-			redo_possible = false;
+      lc = 0; // line count for current stroke
+      sc = 0; // stroke count
+      redo_possible = false;
       p5.clear();
       // reset color to black (default)
       curr_color = p5.color("#000000");
