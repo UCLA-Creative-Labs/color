@@ -1547,19 +1547,67 @@ const sketch = p5 => {
     mu = true;
     movement = 5;
 
-    let poly = new Tone.PolySynth();
-    let guitar = new Tone.PluckSynth({ resonance: 0.99 });
-    let fm = new Tone.MetalSynth();
-    let synth = new Tone.PolySynth().toMaster(); //random declaration of synth
-    if (lilstroke.shape === "triangle") {
+    let synth = new Tone.PolySynth().toMaster();  //random declaration of synth
+    if(lilstroke.shape == "triangle"){
+      let fm = new Tone.MetalSynth({frequency: color_res*2}, {resonance:color_freq*2});
       synth = fm.toMaster();
-      synth.triggerAttackRelease(scale[8], note_duration);
-    } else if (lilstroke.shape === "circle") {
+      synth.triggerAttackRelease(scale[15], "4n");
+
+    }else if (lilstroke.shape == "circle"){
+      let poly = new Tone.PolySynth({frequency: color_freq*7});
       synth = poly.toMaster();
-      synth.triggerAttackRelease(scale[3], note_duration);
-    } else if (lilstroke.shape === "rectangle") {
+      switch (color_res)
+      {
+        case 1:
+        synth.triggerAttackRelease(["C4", "E4", "G4"], "4n"); //c major
+        break;
+        case 3:
+        synth.triggerAttackRelease(["F4", "A4", "C4"], "4n"); //F major 
+        break;
+        case 5:
+        synth.triggerAttackRelease(["G4", "B4", "D4"], "4n"); //G major 
+        break;
+        case 7:
+        synth.triggerAttackRelease(["A4", "C4", "E4"], "4n"); //A minor
+        break;
+        case 9:
+        synth.triggerAttackRelease(["B4", "D4", "F4"], "4n"); //B diminished
+        break;
+        case 11:
+        synth.triggerAttackRelease(["E4", "G4", "B4"], "4n"); //E minor
+        break;
+        case 13:
+        synth.triggerAttackRelease(["D4", "F4", "A4"], "4n"); //D minor
+        break;
+      }
+    }else if(lilstroke.shape == "rectangle"){
+      let guitar = new Tone.PluckSynth({resonance: 0.9});
       synth = guitar.toMaster();
-      synth.triggerAttackRelease(scale[5], note_duration);
+      switch (color_res)
+      {
+        case 1:
+        synth.triggerAttackRelease(scale[1], "4n"); //c major
+        break;
+        case 3:
+        synth.triggerAttackRelease(scale[2]); //F major 
+        break;
+        case 5:
+        synth.triggerAttackRelease(scale[3]); //G major 
+        break;
+        case 7:
+        synth.triggerAttackRelease(scale[4]); //A minor
+        break;
+        case 9:
+        synth.triggerAttackRelease(scale[5]); //B diminished
+        break;
+        case 11:
+        synth.triggerAttackRelease(scale[6]); //E minor
+        break;
+        case 13:
+        synth.triggerAttackRelease(scale[7]); //D minor
+        break;
+        //synth.triggerAttackRelease(scale[5], note_duration);
+      }
     } else {
       // check stroke click and play both sounds
       gridArr.forEach(element => {
