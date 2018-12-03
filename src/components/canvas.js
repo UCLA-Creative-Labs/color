@@ -1388,6 +1388,8 @@ let strokes = [];
 let _r = new DollarRecognizer();
 let lilstroke;
 let result;
+let color_freq = 1;
+let color_res = 0.1;
 // array of Grid objects
 let gridArr = [];
 // stroke start location
@@ -1550,6 +1552,7 @@ const sketch = p5 => {
     let synth = new Tone.PolySynth().toMaster();  //random declaration of synth
     if(lilstroke.shape == "triangle"){
       let fm = new Tone.MetalSynth({frequency: color_res*2}, {resonance:color_freq*2});
+      //let fm = new Tone.MetalSynth({resonance:color_freq*2});
       synth = fm.toMaster();
       synth.triggerAttackRelease(scale[15], "4n");
 
@@ -1583,6 +1586,7 @@ const sketch = p5 => {
     }else if(lilstroke.shape == "rectangle"){
       let guitar = new Tone.PluckSynth({resonance: 0.9});
       synth = guitar.toMaster();
+      //synth.triggerAttackRelease(scale[color_res]);
       switch (color_res)
       {
         case 1:
@@ -1608,6 +1612,7 @@ const sketch = p5 => {
         break;
         //synth.triggerAttackRelease(scale[5], note_duration);
       }
+      
     } else {
       // check stroke click and play both sounds
       gridArr.forEach(element => {
@@ -1635,6 +1640,7 @@ const sketch = p5 => {
   };
 
   p5.keyPressed = () => {
+    /*
     switch (p5.key) {
       case "T":
         curr_color = p5.color(color_options.scheme_1[0]);
@@ -1663,6 +1669,57 @@ const sketch = p5 => {
       default:
         break;
     }
+    */
+    switch (p5.key) {
+      case "R":
+      case "r":
+        p5.clear();
+        curr_color = p5.color("#000000");
+        instrument = "piano";
+        color_freq = 0.1;
+        color_res = 1;
+        break;
+      case "T":
+        curr_color = p5.color(color_options.scheme_1[0]);
+        instrument = "piano";
+        color_freq = 0.25;
+        color_res = 3;
+        break;
+      case "G":
+        curr_color = p5.color(color_options.scheme_1[1]);
+        instrument = "piano";
+        color_freq = 0.4;
+        color_res = 5;
+        break;
+      case "Y":
+        curr_color = p5.color(color_options.scheme_2[0]);
+        instrument = "guitar";
+        color_freq = 0.55;
+        color_res = 7;
+        break;
+      case "H":
+        curr_color = p5.color(color_options.scheme_2[1]);
+        instrument = "guitar";
+        color_freq = 0.7;
+        color_res = 9;
+        break;
+      case "U":
+        curr_color = p5.color(color_options.scheme_3[0]);
+        instrument = "harmonica";
+        color_freq = 0.85;
+        color_res = 11;
+        break;
+      case "J":
+        curr_color = p5.color(color_options.scheme_3[1]);
+        instrument = "harmonica";
+        color_freq = 0.99;
+        color_res = 13;
+        break;
+      default:
+        break;
+
+    }
+
 
     for (var k = 0; k < gridArr.length; k++) {
       gridArr[k].change_instrument(instrument);
