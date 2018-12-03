@@ -1620,7 +1620,7 @@ const sketch = p5 => {
     }
 
     // undo
-    if (p5.key === "D" || p5.key === "d") {
+    if ((p5.key === "D" || p5.key === "d") && !curr_playing) {
       if (lines.length > 0 && mu) {
         //add deleted lines to deleted_lines array
         temp_line = lines.slice(
@@ -1643,7 +1643,7 @@ const sketch = p5 => {
     }
 
     // redo
-    if (p5.key === "Q" || p5.key === "q") {
+    if ((p5.key === "Q" || p5.key === "q") && !curr_playing) {
       if (redo_possible && mu) {
         lines = lines.concat(temp_line); //add line back to lines array
         redo_possible = false;
@@ -1660,7 +1660,7 @@ const sketch = p5 => {
     }
 
     // reset
-    if (p5.key === "R" || p5.key === "r") {
+    if ((p5.key === "R" || p5.key === "r") && !curr_playing) {
       // clear the lines array --> remove all drawings from screen
       lines.length = 0;
       lines = [];       // all lines
@@ -1687,6 +1687,12 @@ const sketch = p5 => {
       e_synthArray.length = 0;
       s_freqArray.length = 0;
       e_freqArray.length = 0;
+
+      //for playback animation
+      pb_start = 0;
+      pb_end = 0;
+      pb_prev_start = 0;
+      pb_prev_end = 0;
     }
 
     // play sounds
@@ -1779,7 +1785,7 @@ const sketch = p5 => {
           playbackAnimation(pb_i);
         } 
       }
-      //add stroke to one more
+      //add weight to one more stroke
       else{
         if (pb_start !== 0){
           //decrease strokeWeight of previous lines
