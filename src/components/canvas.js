@@ -1644,7 +1644,7 @@ const sketch = p5 => {
     }
 
     // undo
-    if ((p5.key === "D" || p5.key === "d") && !curr_playing) {
+    if ((p5.key === "D" || p5.key === "d") && !curr_playing && it === 0) {
       if (lines.length > 0 && mu) {
         //add deleted lines to deleted_lines array
         temp_line = lines.slice(
