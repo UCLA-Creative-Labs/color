@@ -1549,17 +1549,35 @@ const sketch = p5 => {
 
     let poly = new Tone.PolySynth();
     let guitar = new Tone.PluckSynth({ resonance: 0.99 });
-    let fm = new Tone.MetalSynth();
+    //let metal = new Tone.MetalSynth();
+    let harmonica = new Tone.FMSynth({ harmonicity: 2 });
     let synth = new Tone.PolySynth().toMaster(); //random declaration of synth
     if (lilstroke.shape === "triangle") {
-      synth = fm.toMaster();
-      synth.triggerAttackRelease(scale[8], note_duration);
+      synth = harmonica.toMaster();
+      synth.triggerAttackRelease(scale[7], note_duration);
+
+      s_synthArray.push(synth);
+      s_freqArray.push(scale[7]);
+      e_synthArray.push(synth);
+      e_freqArray.push(scale[7]);
+      console.log(s_synthArray);
+      console.log(s_freqArray);
     } else if (lilstroke.shape === "circle") {
       synth = poly.toMaster();
       synth.triggerAttackRelease(scale[3], note_duration);
+
+      s_synthArray.push(synth);
+      s_freqArray.push(scale[3]);
+      e_synthArray.push(synth);
+      e_freqArray.push(scale[3]);
     } else if (lilstroke.shape === "rectangle") {
       synth = guitar.toMaster();
       synth.triggerAttackRelease(scale[5], note_duration);
+
+      s_synthArray.push(synth);
+      s_freqArray.push(scale[5]);
+      e_synthArray.push(synth);
+      e_freqArray.push(scale[5]);
     } else {
       // check stroke click and play both sounds
       gridArr.forEach(element => {
