@@ -1,51 +1,65 @@
+@font-face {
+  font-family: crayon;
+  src: url(../../fonts/CrayonHandRegular2016Demo.ttf);
+}
+
+@font-face {
+  font-family: amigo;
+  src: url(../../fonts/AhoyAmigo-DEMO.ttf);
+}
+
 .modal-wrapper {
-  background: white;
-  border: 1px solid #d0cccc;
-  box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2), 0 7px 20px 0 rgba(0, 0, 0, 0.17);
-  margin: 100px auto 0;
+  width: 50vw;
+  height: 50vh;
   transition: all 0.8s;
-  width: 60%;
   position: absolute;
   transform: translate(50%, 50%);
-  background-color: rgba(0, 0, 0, 0.3);
+  background-color: white;
+  border: solid;
 }
 
-.modal-header {
-  background: #263238;
-  height: 40px;
-  line-height: 40px;
-  padding: 5px 20px;
-  text-align: right;
-  font-family: Calibri;
+#how_to_div_modal {
+  width: 90%;
+  height: 100%;
+  display: table;
+  margin-top: 3vh;
+  margin-right: auto;
+  margin-left: auto;
 }
 
-.modal-header h3 {
-  color: white;
-  float: left;
-  margin: 0;
-  padding: 0;
+#how_to_modal {
+  display: table-cell;
+  vertical-align: center;
+  font-size: 5vh;
+  font-family: crayon, "arial";
 }
 
-.modal-body {
-  padding: 10px 15px;
-  text-align: center;
-  background: #263238;
-  color: white;
-  font-family: Calibri;
+#drag_to_draw {
+  display: table-cell;
+  vertical-align: center;
+  font-size: 3vh;
+  font-family: crayon, "arial";
 }
 
-.modal-footer {
-  background: #263238;
-  height: 35px;
-  padding: 15px;
+#press_div_modal {
+  width: 80%;
+  height: 100%;
+  margin-top: 3.5vh;
+  margin-right: auto;
+  margin-left: auto;
+  display: table;
 }
-/*
-.open-modal-btn {
-  margin: 15px;
-  padding: 10px;
-  width: 40px;
-  height: 40px;
-  font-weight: bold;
-  border-radius: 30px;
+
+#press_div_modal h3 {
+  font-size: 3vh;
+  font-family: crayon, "arial";
+  display: table-cell;
+  vertical-align: center;
 }
-*/
+
+#press_options_modal {
+  font-family: amigo, "arial";
+  font-size: 3vh;
+  display: table-cell;
+  vertical-align: center;
+}

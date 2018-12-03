@@ -1,0 +1,24 @@
+@font-face {
+  font-family: amigo;
+  src: url(../../fonts/AhoyAmigo-DEMO.ttf);
+}
+
+#modal_button {
+  position: fixed;
+  border: solid;
+  font-size: 3vh;
+  font-family: amigo, "arial";
+  width: 7vh;
+  height: 7vh;
+  border-radius: 50%;
+  transition: opacity 0.35s ease-in;
+  margin-left: 0;
+}
+
+#modal_button:hover {
+  opacity: 0;
+}
+
+#modal_button:focus {
+  outline: none;
+}

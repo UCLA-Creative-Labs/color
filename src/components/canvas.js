@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import P5Wrapper from "react-p5-wrapper";
 import Tone from "tone";
+import "react-p5-wrapper/node_modules/p5/lib/addons/p5.dom";
 
 // window dimensions
 let windowHeight = window.innerHeight;
@@ -1449,7 +1450,8 @@ class Grid {
 const sketch = p5 => {
   p5.setup = () => {
     // create canvas and set default color
-    p5.createCanvas(p5.windowWidth, p5.windowHeight);
+    let my_canvas = p5.createCanvas(p5.windowWidth, p5.windowHeight);
+    my_canvas.style.display = "block";
     curr_color = p5.color("#000000");
 
     //initialize Grid objects
@@ -1468,6 +1470,9 @@ const sketch = p5 => {
     }
   };
 
+  p5.windowResized = () => {
+    p5.resizeCanvas(p5.windowWidth, p5.windowHeight);
+  };
 
 	p5.draw = () => {
 		p5.clear();

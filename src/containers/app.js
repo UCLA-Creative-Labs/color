@@ -1,26 +1,32 @@
 import React, { Component } from "react";
-import Button from "../components/button";
+import Button from "../components/button/button";
 import Modal from "../components/modal/modal";
 import Canvas from "../components/canvas";
+import Landing from "../components/landing/landing";
 
 class App extends Component {
   constructor() {
     super();
 
     this.state = {
-      isShowing: false
+      isShowing: false,
+      app_loaded: false
     };
+
+    this.load_app = this.load_app.bind(this);
   }
 
   openModalHandler = () => {
     this.setState({
-      isShowing: true
+      isShowing: true,
+      app_loaded: this.state.app_loaded
     });
   };
 
   closeModalHandler = () => {
     this.setState({
-      isShowing: false
+      isShowing: false,
+      app_loaded: this.state.app_loaded
     });
   };
 
@@ -28,10 +34,17 @@ class App extends Component {
     alert(text);
   }
 
+  load_app() {
+    this.setState({
+      isShowing: this.state.isShowing,
+      app_loaded: true
+    });
+  }
+
   render() {
-    return (
-      <div className="App">
-        <h1>Welcome to Color</h1>
+    const landing = <Landing app_handler={this.load_app} />;
+    const app = (
+      <div>
         {this.state.isShowing ? (
           <div onMouseLeave={this.closeModalHandler} className="back-drop" />
         ) : null}
@@ -44,17 +57,9 @@ class App extends Component {
           className="modal"
           show={this.state.isShowing}
           close={this.closeModalHandler}
-        >
-          <p>
-            Turning colorful drawings into musical notes. A visuals
-            music-alizer.
-          </p>
-          <p> Made with ❤ from Creative Labs</p>
-        </Modal>
+        />
         <Canvas
           id="myCanvas"
-          width="420"
-          height="400"
           style="background-color:#dddddd"
           onmousedown="mouseDownEvent(event.clientX, event.clientY, event.button)"
           onmousemove="mouseMoveEvent(event.clientX, event.clientY, event.button)"
@@ -67,6 +72,8 @@ class App extends Component {
         </Canvas>
       </div>
     );
+    const content = this.state.app_loaded ? app : landing;
+    return <div className="App">{content}</div>;
   }
 }
 

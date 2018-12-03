@@ -1,0 +1,365 @@
+@font-face {
+  font-family: crayon;
+  src: url(../../fonts/CrayonHandRegular2016Demo.ttf);
+}
+
+@font-face {
+  font-family: amigo;
+  src: url(../../fonts/AhoyAmigo-DEMO.ttf);
+}
+
+@keyframes fadeinout {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Firefox < 16 */
+@-moz-keyframes fadeinout {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Safari, Chrome and Opera > 12.1 */
+@-webkit-keyframes fadeinout {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Internet Explorer */
+@-ms-keyframes fadeinout {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Opera < 12.1 */
+@-o-keyframes fadeinout {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes fadein {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Firefox < 16 */
+@-moz-keyframes fadein {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Safari, Chrome and Opera > 12.1 */
+@-webkit-keyframes fadein {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Internet Explorer */
+@-ms-keyframes fadein {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Opera < 12.1 */
+@-o-keyframes fadein {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* landing page div */
+.landing_page {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  text-align: center;
+  display: table;
+  background-color: white;
+}
+
+.landing_page h1 {
+  display: table-cell;
+  vertical-align: middle;
+  font-size: 20vh;
+  font-family: crayon, "arial";
+  color: black;
+
+  -webkit-animation: fadeinout 7s forwards; /* Safari, Chrome and Opera > 12.1 */
+  -moz-animation: fadeinout 7s forwards; /* Firefox < 16 */
+  -ms-animation: fadeinout 7s forwards; /* Internet Explorer */
+  -o-animation: fadeinout 7s forwards; /* Opera < 12.1 */
+  animation: fadeinout 7s forwards;
+}
+
+/* description page div */
+.landing_page div {
+  display: table-cell;
+  vertical-align: middle;
+
+  -webkit-animation: fadeinout 10s forwards; /* Safari, Chrome and Opera > 12.1 */
+  -moz-animation: fadeinout 10s forwards; /* Firefox < 16 */
+  -ms-animation: fadeinout 10s forwards; /* Internet Explorer */
+  -o-animation: fadeinout 10s forwards; /* Opera < 12.1 */
+  animation: fadeinout 10s forwards;
+}
+
+.landing_page h2 {
+  font-size: 5vh;
+  font-family: crayon, "arial";
+  color: black;
+  margin-bottom: 9%;
+  margin-top: 9%;
+}
+
+/* how to page */
+.how_to_page_div {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+
+  -webkit-animation: fadein 5s forwards; /* Safari, Chrome and Opera > 12.1 */
+  -moz-animation: fadein 5s forwards; /* Firefox < 16 */
+  -ms-animation: fadein 5s forwards; /* Internet Explorer */
+  -o-animation: fadein 5s forwards; /* Opera < 12.1 */
+  animation: fadein 5s forwards;
+}
+
+#how_to_div {
+  height: 15%;
+  width: 90%;
+  display: table;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 4vh;
+}
+
+#how_to {
+  font-family: crayon, "arial";
+  font-size: 10vh;
+  margin-left: 3vh;
+  display: inline-block;
+  display: table-cell;
+  vertical-align: middle;
+}
+
+#how_to_div img {
+  width: 25%;
+  height: 100%;
+  float: right;
+}
+
+#drag_to_draw_div {
+  height: 25%;
+  width: 60%;
+  margin-left: auto;
+  margin-right: auto;
+  display: table;
+}
+
+#drag_to_draw_div h3 {
+  font-family: amigo, "arial";
+  font-size: 12vh;
+  display: inline-block;
+  display: table-cell;
+  vertical-align: middle;
+}
+
+#drag_to_draw_div img {
+  height: 100%;
+  width: 50%;
+  display: table-cell;
+  vertical-align: middle;
+}
+
+#press_div {
+  height: 50%;
+  width: 70%;
+  margin-top: 5vh;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 4vh;
+  display: table;
+}
+
+#press_div h3 {
+  font-family: crayon, "arial";
+  font-size: 7vh;
+  display: inline-block;
+  display: table-cell;
+}
+
+#press_options {
+  display: inline-block;
+  font-family: amigo, "arial";
+  font-size: 7vh;
+  display: table-cell;
+  vertical-align: middle;
+}
+
+/* next button */
+#next_button_div {
+  height: 10%;
+  width: 50%;
+  margin-right: auto;
+  margin-left: auto;
+  margin-bottom: 4vh;
+}
+
+#next_button_div button {
+  height: 100%;
+  width: 100%;
+  font-family: amigo, "arial";
+  font-size: 7vh;
+  border-radius: 12px;
+  border: solid;
+  transition: background-color 0.5s ease-in;
+}
+
+#next_button_div button:hover {
+  background-color: #ff8491;
+  cursor: pointer;
+}
+
+#next_button_div button:focus {
+  outline: none;
+}
+
+/* first landing page colors */
+#color_1 {
+  color: #f67280;
+}
+#color_2 {
+  color: #ffeb8c;
+}
+#color_3 {
+  color: #75d976;
+}
+#color_4 {
+  color: #68d9c6;
+}
+#color_5 {
+  color: #bc8ee5;
+}
+
+/* second landing page colors */
+#colorful_1,
+#colorful_6 {
+  color: #337ca0;
+}
+#colorful_2,
+#colorful_7 {
+  color: #3ec300;
+}
+#colorful_3,
+#colorful_8 {
+  color: #ffeb8c;
+}
+#colorful_4 {
+  color: #ff1d15;
+}
+#colorful_5 {
+  color: #e13700;
+}
+
+/* third landing page colors */
+#musical_1,
+#musical_6 {
+  color: #01295f;
+}
+#musical_2,
+#musical_7 {
+  color: #437f97;
+}
+#musical_3 {
+  color: #849324;
+}
+#musical_4 {
+  color: #ffb30f;
+}
+#musical_5 {
+  color: #fd151b;
+}
+
+/* visuals musicalizer colors */
+#visuals {
+  color: #ff8491;
+}
+#musicalizer {
+  color: #ff8491;
+}
+
+/* CL colors */
+#creative_1,
+#creative_3,
+#creative_5,
+#creative_7,
+#labs_1,
+#labs_3 {
+  color: #486bfd;
+}
+#creative_2,
+#creative_4,
+#creative_6,
+#creative_8,
+#labs_2,
+#labs_4 {
+  color: #ff9688;
+}

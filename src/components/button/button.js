@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import "./button.css";
 
 /* 
 
@@ -31,6 +32,7 @@ class Button extends Component {
         onMouseLeave={OnMouseLeave}
         onMouseDown={OnMouseDown}
         onMouseUp={OnMouseUp}
+        id="modal_button"
       >
         <img src={ImgSrc} />
         {ButtonText}
