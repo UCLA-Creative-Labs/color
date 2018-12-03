@@ -40,9 +40,12 @@ class Landing extends Component {
             : "how_to_page_div"
         }
       >
-        <h3 id="how_to">
-          <u>How To:</u>
-        </h3>
+        <div id="how_to_div">
+          <h3 id="how_to">
+            <u>How To:</u>
+          </h3>
+          <img src={require("../../Images/scroll_down.png")} />
+        </div>
         <div id="drag_to_draw_div">
           <img src={require("../../Images/drag.png")} />
           <h3>Drag to draw</h3>
@@ -64,7 +67,7 @@ class Landing extends Component {
           </div>
         </div>
         <div id="next_button_div">
-          <button>Okay, take me to the app!</button>
+          <button>Let's draw!</button>
         </div>
       </div>
     );

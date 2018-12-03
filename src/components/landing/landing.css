@@ -182,10 +182,28 @@
   animation: fadein 5s forwards;
 }
 
+#how_to_div {
+  height: 15%;
+  width: 90%;
+  display: table;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 4vh;
+}
+
 #how_to {
   font-family: crayon, "arial";
   font-size: 10vh;
-  margin: 3vh;
+  margin-left: 3vh;
+  display: inline-block;
+  display: table-cell;
+  vertical-align: middle;
+}
+
+#how_to_div img {
+  width: 25%;
+  height: 100%;
+  float: right;
 }
 
 #drag_to_draw_div {
