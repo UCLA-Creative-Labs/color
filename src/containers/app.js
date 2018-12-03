@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import Button from "../components/button";
+import Button from "../components/button/button";
 import Modal from "../components/modal/modal";
 import Canvas from "../components/canvas";
 import Landing from "../components/landing/landing";
@@ -66,8 +66,6 @@ class App extends Component {
         </Modal>
         <Canvas
           id="myCanvas"
-          width="420"
-          height="400"
           style="background-color:#dddddd"
           onmousedown="mouseDownEvent(event.clientX, event.clientY, event.button)"
           onmousemove="mouseMoveEvent(event.clientX, event.clientY, event.button)"
@@ -80,7 +78,10 @@ class App extends Component {
         </Canvas>
       </div>
     );
-    const content = this.state.app_loaded ? app : landing;
+
+    //const content = this.state.app_loaded ? app : landing;
+    const content = app;
+
     return <div className="App">{content}</div>;
   }
 }
