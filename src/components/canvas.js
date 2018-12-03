@@ -1695,7 +1695,7 @@ const sketch = p5 => {
       if (s_synthArray.length > 0){
         if (!curr_playing){
           play_length = s_synthArray.length;
-          console.log(it);
+          pb_end = lines.length;
           if (it !== 0){
             playAllSounds(it+1);
             playbackAnimation(it+1);
@@ -1707,6 +1707,7 @@ const sketch = p5 => {
         }
         else {
           play_length = 0;
+          pb_end = 0;
         }
       }
     }
@@ -1735,45 +1736,48 @@ const sketch = p5 => {
   }
 
   let pb_start = 0;
+  let pb_end = 0;
   let pb_prev_start = 0;
   let pb_prev_end = 0;
   function playbackAnimation(pb_i){
     setTimeout(function() {
       // pb_start = pb_i;
+      console.log(pb_i);
 
-      if (pb_start !== 0){
-        //decrease strokeWeight of previous lines
-        for (var j = pb_prev_start; j < pb_prev_end; j++){
-          lines[j].weight /= 1.5;
-        }
-      }
-
-      //increase strokeWeight of lines
-      for (var i = pb_start; i < (pb_start + line_count[pb_i]); i++){
-        lines[i].weight *= 1.5;
-      }
-
-      pb_prev_start = pb_start;
-      pb_prev_end = pb_start + line_count[pb_i];
-
-      pb_start += line_count[pb_i];
-      // pb_sc++;
-      pb_i++;
-      if (pb_i >= sc){
-        console.log(pb_i);
-        //wait 800 ms then decrease strokeWeight of last stroke
-        setTimeout(function(){
-          for (var k = pb_prev_start; k < pb_prev_end; k++){
-            lines[k].weight /= 1.5;
+      if (pb_end !== 0 && (pb_start + line_count[pb_i]) <= pb_end){
+        if (pb_start !== 0){
+          //decrease strokeWeight of previous lines
+          for (var j = pb_prev_start; j < pb_prev_end; j++){
+            lines[j].weight /= 1.5;
           }
-        },800);
-        // pb_sc = 0;
-        pb_start = 0;
-        console.log("end");
-        return;
-      }
-      else{
-        playbackAnimation(pb_i);
+        }
+
+        //increase strokeWeight of lines
+        for (var i = pb_start; i < (pb_start + line_count[pb_i]); i++){
+          lines[i].weight *= 1.5;
+        }
+
+        pb_prev_start = pb_start;
+        pb_prev_end = pb_start + line_count[pb_i];
+
+        pb_start += line_count[pb_i];
+        // pb_sc++;
+        pb_i++;
+        if (pb_i >= sc){
+          //wait 800 ms then decrease strokeWeight of last stroke
+          setTimeout(function(){
+            for (var k = pb_prev_start; k < pb_prev_end; k++){
+              lines[k].weight /= 1.5;
+            }
+          },800);
+          // pb_sc = 0;
+          pb_start = 0;
+          console.log("end");
+          return;
+        }
+        else{
+          playbackAnimation(pb_i);
+        } 
       } 
     }, 800);
   }
