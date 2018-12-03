@@ -3,7 +3,7 @@
   src: url(../../fonts/AhoyAmigo-DEMO.ttf);
 }
 
-button {
+#modal_button {
   position: fixed;
   border: solid;
   font-size: 3vh;
@@ -15,10 +15,10 @@ button {
   margin-left: 0;
 }
 
-button:hover {
+#modal_button:hover {
   opacity: 0;
 }
 
-button:focus {
+#modal_button:focus {
   outline: none;
 }

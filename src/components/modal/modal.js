@@ -22,13 +22,30 @@ const modal = props => {
           opacity: props.show ? "1" : "0"
         }}
       >
-        <div className="modal-header">
-          <h3>Color</h3>
+        <div>
+          <div id="how_to_div_modal">
+            <h3 id="how_to_modal">
+              <u>How To:</u>
+            </h3>
+            <h3 id="drag_to_draw">Drag to draw!</h3>
+          </div>
+          <div id="press_div_modal">
+            <h3>Keyboard Controls:</h3>
+            <div id="press_options_modal">
+              <table>
+                <tr>D - Undo last stroke</tr>
+                <tr>Q - Redo last erased stroke</tr>
+                <tr>R - Reset canvas and color</tr>
+                <tr>T - Teal color</tr>
+                <tr>G - Green color</tr>
+                <tr>Y - Purple color</tr>
+                <tr>H - Orange color</tr>
+                <tr>U - Gold color</tr>
+                <tr>J - Blue color</tr>
+              </table>
+            </div>
+          </div>
         </div>
-        <div className="modal-body">
-          <p>{props.children}</p>
-        </div>
-        <div className="modal-footer" />
       </div>
     </div>
   );

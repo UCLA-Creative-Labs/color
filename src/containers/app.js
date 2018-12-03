@@ -57,13 +57,7 @@ class App extends Component {
           className="modal"
           show={this.state.isShowing}
           close={this.closeModalHandler}
-        >
-          <p>
-            Turning colorful drawings into musical notes. A visuals
-            music-alizer.
-          </p>
-          <p> Made with ❤ from Creative Labs</p>
-        </Modal>
+        />
         <Canvas
           id="myCanvas"
           style="background-color:#dddddd"
@@ -79,8 +73,7 @@ class App extends Component {
       </div>
     );
 
-    //const content = this.state.app_loaded ? app : landing;
-    const content = app;
+    const content = this.state.app_loaded ? app : landing;
 
     return <div className="App">{content}</div>;
   }
