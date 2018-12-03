@@ -1,5 +1,5 @@
-import React from 'react';
-import './modal.css';
+import React from "react";
+import "./modal.css";
 
 //how to use: paste the stuff below into app.js under <Button>
 // use Ctrl / to block uncomment
@@ -13,27 +13,25 @@ import './modal.css';
 //        Brought to u by us
 // </Modal>
 
-const modal = (props) => {
-    return (
-        <div>
-            <div className="modal-wrapper"
-                style={{
-                    //transform: props.show ? 'translateY(0vh)' : 'translateY(-100vh)',
-                    opacity: props.show ? '1' : '0'
-                }}>
-                <div className="modal-header">
-                    <h3>Creative Labs Color Fall 2k18 </h3>
-                </div>
-                <div className="modal-body">
-                    <p>
-                        {props.children}
-                    </p>
-                </div>
-                <div className="modal-footer">
-                </div>
-            </div>
+const modal = props => {
+  return (
+    <div>
+      <div
+        className="modal-wrapper"
+        style={{
+          opacity: props.show ? "1" : "0"
+        }}
+      >
+        <div className="modal-header">
+          <h3>Color</h3>
         </div>
-    )
-}
+        <div className="modal-body">
+          <p>{props.children}</p>
+        </div>
+        <div className="modal-footer" />
+      </div>
+    </div>
+  );
+};
 
 export default modal;

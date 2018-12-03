@@ -14,8 +14,6 @@ let color_res = 1; //this is the color frequency for changing the shape sound wi
 const note_duration = "4n";
 const scale = ["C5", "B4", "A4", "G4", "F4", "E4", "D4", "C4"];
 
-//import dollar from "./dollar.js";
-
 var lines = []; // all lines
 var line_count = []; // stores number of lines for every stroke
 let temp_line = []; // stores last 'undo' line
@@ -27,6 +25,7 @@ var movement_x,
   movement_y,
   movement = 5; // base stroke width is 5
 var mu = false; //mouse up
+
 let instrument = "";
 
 document.documentElement.onmousemove = function(event) {
@@ -1255,6 +1254,7 @@ function TranslateTo(points, pt) {
     newpoints[newpoints.length] = new Point(qx, qy);
   }
   return newpoints;
+
 }
 function Vectorize(points) {
   // for Protractor
@@ -1317,6 +1317,7 @@ function Centroid(points) {
   y /= points.length;
   return new Point(x, y);
 }
+
 function BoundingBox(points) {
   var minX = +Infinity,
     maxX = -Infinity,
@@ -1367,78 +1368,74 @@ function brushStroke(x, y) {
   this.shape = "No Match.";
 }
 
-const sketch = p5 => {
-  let curr_color;
-  var points = [];
-  var strokes = [];
-  var _r = new DollarRecognizer();
-  var lilstroke;
-  var result;
-  
 
-  //array of Grid objects
-  let gridArr = [];
+// sketch vars
+let points = [];
+let strokes = [];
+let _r = new DollarRecognizer();
+let lilstroke;
+let result;
+// array of Grid objects
+let gridArr = [];
+// stroke start location
+let stroke_start;
+// color schemes
+const color_options = {
+  scheme_1: ["#94EBD8", "#00B349"],
+  scheme_2: ["#983275", "#FF6F01"],
+  scheme_3: ["#C3A706", "#329290"]
+};
 
-  //stroke start location
-  let stroke_start;
+// grid class
+class Grid {
+  constructor(boundaries, note_freq) {
+    this.boundary_xstart = boundaries.xstart;
+    this.boundary_xend = boundaries.xend;
+    this.boundary_ystart = boundaries.ystart;
+    this.boundary_yend = boundaries.yend;
+    // sound init
+    this.synth = new Tone.PolySynth().toMaster();
+    this.note_freq = note_freq;
+  }
 
-  // grid class
-  class Grid {
-    constructor(boundaries, note_freq) {
-      this.boundary_xstart = boundaries.xstart;
-      this.boundary_xend = boundaries.xend;
-      this.boundary_ystart = boundaries.ystart;
-      this.boundary_yend = boundaries.yend;
-      // sound init
-      this.synth = new Tone.PolySynth().toMaster();
-
-      this.note_freq = note_freq;
-    }
-
-    check_bound(x, y) {
-      return (
-        x >= this.boundary_xstart &&
-        x <= this.boundary_xend &&
-        y >= this.boundary_ystart &&
-        y <= this.boundary_yend
-      );
-    }
-
-    play_sound() {
-      console.log(note_duration);
-      this.synth.triggerAttackRelease(this.note_freq, note_duration);
-    }
+  check_bound(x, y) {
+    return (
+      x >= this.boundary_xstart &&
+      x <= this.boundary_xend &&
+      y >= this.boundary_ystart &&
+      y <= this.boundary_yend
+    );
+  }
 
     change_instrument(instrument) {
-    	let poly = new Tone.PolySynth();
-      	let guitar = new Tone.PluckSynth({resonance: 0.99});
-      	let fm = new Tone.FMSynth();
+    	  let piano = new Tone.PolySynth();
+        let guitar = new Tone.PluckSynth({resonance: 0.99});
+        let harmonica = new Tone.FMSynth({harmonicity: 2});
 
       	switch(instrument){
-      		case "poly":
-      			this.synth = poly.toMaster();
+      		case "piano":
+      			this.synth = piano.toMaster();
       			break;
       		case "guitar":
       			this.synth = guitar.toMaster();
       			break;
-      		case "fm":
-      			this.synth = fm.toMaster();
+      		case "harmonica":
+      			this.synth = harmonica.toMaster();
       			break;
       		default:
-      			this.synth = poly.toMaster();
+      			this.synth = piano.toMaster();
       			break;
       	}
     }
+  
+  play_sound() {
+    this.synth.triggerAttackRelease(this.note_freq, note_duration);
   }
+}
 
-  // color schemes
-  const color_options = {
-    scheme_1: ["#94EBD8", "#00B349"],
-    scheme_2: ["#983275", "#FF6F01"],
-    scheme_3: ["#C3A706", "#329290"]
-  };
-
+const sketch = p5 => {
   p5.setup = () => {
+    // create canvas and set default color
     p5.createCanvas(p5.windowWidth, p5.windowHeight);
     curr_color = p5.color("#000000");
 
@@ -1464,15 +1461,41 @@ const sketch = p5 => {
     }
   };
 
+  p5.mouseReleased = () => {
+    //strokes.push(points) // dont push strokes here as an array, push the object it gets recognized
+    if (points.length > 10) {
+      result = _r.Recognize(points);
+      lilstroke.shape = result.Name;
+    } else {
+      lilstroke.shape = "No Match.";
+    }
+    console.log(lilstroke.shape);
+    strokes.push(lilstroke);
+
+    line_count[sc] = lc;
+    sc++;
+    mu = true;
+    movement = 5;
+
+    // check stroke click and play both sounds
+    gridArr.forEach(element => {
+      if (element.check_bound(p5.mouseX, p5.mouseY)) {
+        element.play_sound();
+      }
+      if (element.check_bound(stroke_start[0], stroke_start[1])) {
+        element.play_sound();
+      }
+    });
+  };
+
   p5.mousePressed = () => {
     // store stroke start for playing at end of stroke
     stroke_start = [p5.mouseX, p5.mouseY];
     points = [];
     lilstroke = new brushStroke(p5.mouseX, p5.mouseY);
-    // prevX = p5.pmouseX;
-    // prevY = p5.pmouseY;
     mu = false;
     lc = 0;
+    redo_possible = false;
   };
 
   p5.mouseDragged = () => {
@@ -1481,9 +1504,6 @@ const sketch = p5 => {
     p5.line(p5.mouseX, p5.mouseY, p5.pmouseX, p5.pmouseY);
     var currpoint = new otherPoint(p5.mouseX, p5.mouseY);
     points.push(currpoint);
-    //prevX = p5.pmouseX;
-    //prevY = p5.pmouseY;
-    //drawings[drawings.length-1].update();
     lines.push(
       new Line(
         p5.mouseX,
@@ -1515,8 +1535,12 @@ const sketch = p5 => {
     sc++;
     mu = true;
     movement = 5;
-   
-    let synth = new Tone.PolySynth().toMaster();
+
+    
+    let poly = new Tone.PolySynth();
+    let guitar = new Tone.PluckSynth({resonance: 0.99});
+    let fm = new Tone.MetalSynth();
+    let synth = new Tone.PolySynth().toMaster();  //random declaration of synth
     if(lilstroke.shape == "triangle"){
       //let fm = new Tone.MetalSynth({frequency: 10}, {resonance:1});
       let fm = new Tone.MetalSynth({frequency: color_res*2}, {resonance:color_freq*2});
@@ -1616,19 +1640,19 @@ const sketch = p5 => {
       case "r":
         p5.clear();
         curr_color = p5.color("#000000");
-        instrument = "poly";
+        instrument = "piano";
         color_freq = 0.1;
         color_res = 1;
         break;
       case "T":
         curr_color = p5.color(color_options.scheme_1[0]);
-        instrument = "poly";
+        instrument = "piano";
         color_freq = 0.25;
         color_res = 3;
         break;
       case "G":
         curr_color = p5.color(color_options.scheme_1[1]);
-        instrument = "poly";
+        instrument = "piano";
         color_freq = 0.4;
         color_res = 5;
         break;
@@ -1646,24 +1670,24 @@ const sketch = p5 => {
         break;
       case "U":
         curr_color = p5.color(color_options.scheme_3[0]);
-        instrument = "fm";
+        instrument = "harmonica";
         color_freq = 0.85;
         color_res = 11;
         break;
       case "J":
         curr_color = p5.color(color_options.scheme_3[1]);
-        instrument = "fm";
+        instrument = "harmonica";
         color_freq = 0.99;
         color_res = 13;
         break;
       default:
         break;
+
     }
 
     for (var k = 0; k < gridArr.length; k++){
     	gridArr[k].change_instrument(instrument);
     }
-
 
     if (p5.key === "D" || p5.key === "d") {
       if (lines.length > 0 && mu) {
@@ -1675,10 +1699,10 @@ const sketch = p5 => {
         lines.splice(lines.length - line_count[sc - 1], line_count[sc - 1]); //remove Drawing from array
         sc--;
         redo_possible = true;
-
         p5.clear();
       }
     }
+
 
     if (p5.key === "Q" || p5.key === "q") {
       if (redo_possible && mu) {
@@ -1705,8 +1729,16 @@ const sketch = p5 => {
   }
 };
 
-function Canvas(props) {
-  return <P5Wrapper sketch={sketch} />;
+// Canvas component
+class Canvas extends Component {
+  constructor() {
+    super();
+    this.state = {};
+  }
+
+  render() {
+    return <P5Wrapper sketch={sketch} />;
+  }
 }
 
 export default Canvas;
