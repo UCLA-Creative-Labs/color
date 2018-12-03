@@ -9,19 +9,24 @@ class App extends Component {
     super();
 
     this.state = {
-      isShowing: false
+      isShowing: false,
+      app_loaded: false
     };
+
+    this.load_app = this.load_app.bind(this);
   }
 
   openModalHandler = () => {
     this.setState({
-      isShowing: true
+      isShowing: true,
+      app_loaded: this.state.app_loaded
     });
   };
 
   closeModalHandler = () => {
     this.setState({
-      isShowing: false
+      isShowing: false,
+      app_loaded: this.state.app_loaded
     });
   };
 
@@ -29,18 +34,17 @@ class App extends Component {
     alert(text);
   }
 
-  render() {
-    return (
-      <div className="App">
-        <Landing />
-      </div>
-    );
+  load_app() {
+    this.setState({
+      isShowing: this.state.isShowing,
+      app_loaded: true
+    });
   }
-}
 
-export default App;
-
-/*
+  render() {
+    const landing = <Landing app_handler={this.load_app} />;
+    const app = (
+      <div>
         {this.state.isShowing ? (
           <div onMouseLeave={this.closeModalHandler} className="back-drop" />
         ) : null}
@@ -74,4 +78,11 @@ export default App;
             The &lt;canvas&gt; element is not supported by this browser.
           </span>
         </Canvas>
-*/
+      </div>
+    );
+    const content = this.state.app_loaded ? app : landing;
+    return <div className="App">{content}</div>;
+  }
+}
+
+export default App;

@@ -270,6 +270,7 @@
   font-size: 7vh;
   border-radius: 12px;
   border: solid;
+  transition: background-color 0.5s ease-in;
 }
 
 #next_button_div button:hover {
