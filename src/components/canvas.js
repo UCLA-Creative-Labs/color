@@ -1553,10 +1553,20 @@ const sketch = p5 => {
     sc++;
     mu = true;
     movement = 5;
-
-    
     
     let synth = new Tone.PolySynth().toMaster(); //random declaration of synth
+    if(lilstroke.shape ==="triangle" || lilstroke.shape === "rectangle" || lilstroke.shape === "circle"){
+      let q = 0;
+      for (q =lines.length-1; q>lines.length-lc; q--){
+        lines[q].weight *=1.25;
+      }
+      setTimeout(function(){
+        console.log(lines[lc-1]);
+        for (q =lines.length-1; q>lines.length-lc; q--){
+          lines[q].weight /= 1.25; 
+        }
+      },100);
+    }
     if (lilstroke.shape === "triangle") {
       let harmonica = new Tone.FMSynth({ harmonicity: color_freq });
       synth = harmonica.toMaster();
@@ -1566,22 +1576,38 @@ const sketch = p5 => {
       s_freqArray.push(scale[7]);
       e_synthArray.push(synth);
       e_freqArray.push(scale[7]);
-      console.log(s_synthArray);
-      console.log(s_freqArray);
     } else if (lilstroke.shape === "circle") {
       let poly = new Tone.PolySynth();
       synth = poly.toMaster();
-      let chord;
-      switch(color_freq){
+      let chord = ["C4", "E4", "G4"]; // c major
+      switch (color_freq){
         case 1:
-        
+        chord = ["C4", "E4", "G4"]; // c major
+        break;
+        case 2:
+        chord = ["F4", "A4", "C4"];//f major
+        break;
+        case 3:
+        chord = ["G4", "B4", "D4"]; //g major
+        break;
+        case 4:
+        chord = ["A4", "C4", "E4"]; //a minor
+        break;
+        case 5:
+        chord = ["B4", "D4", "F4"]; //b diminshed
+        break;
+        case 6:
+        chord = ["E4", "G4", "B4"];//e minor
+        break;
       }
-      synth.triggerAttackRelease(scale[3], note_duration);
+      console.log(chord);
+      console.log(color_res);
+      synth.triggerAttackRelease(chord, note_duration);
 
       s_synthArray.push(synth);
-      s_freqArray.push(scale[3]);
+      s_freqArray.push(chord);
       e_synthArray.push(synth);
-      e_freqArray.push(scale[3]);
+      e_freqArray.push(chord);
     } else if (lilstroke.shape === "rectangle") {
       let guitar = new Tone.PluckSynth({ resonance: color_res });
       synth = guitar.toMaster();
