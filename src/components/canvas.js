@@ -1389,6 +1389,8 @@ let strokes = [];
 let _r = new DollarRecognizer();
 let lilstroke;
 let result;
+let color_res = 0.9;
+let color_freq = 1;
 // array of Grid objects
 let gridArr = [];
 // stroke start location
@@ -1551,13 +1553,22 @@ const sketch = p5 => {
     sc++;
     mu = true;
     movement = 5;
-
-    let poly = new Tone.PolySynth();
-    let guitar = new Tone.PluckSynth({ resonance: 0.99 });
-    //let metal = new Tone.MetalSynth();
-    let harmonica = new Tone.FMSynth({ harmonicity: 2 });
+    
     let synth = new Tone.PolySynth().toMaster(); //random declaration of synth
+    if(lilstroke.shape ==="triangle" || lilstroke.shape === "rectangle" || lilstroke.shape === "circle"){
+      let q = 0;
+      for (q =lines.length-1; q>lines.length-lc; q--){
+        lines[q].weight *=1.25;
+      }
+      setTimeout(function(){
+        console.log(lines[lc-1]);
+        for (q =lines.length-1; q>lines.length-lc; q--){
+          lines[q].weight /= 1.25; 
+        }
+      },100);
+    }
     if (lilstroke.shape === "triangle") {
+      let harmonica = new Tone.FMSynth({ harmonicity: color_freq });
       synth = harmonica.toMaster();
       synth.triggerAttackRelease(scale[7], note_duration);
 
@@ -1565,17 +1576,40 @@ const sketch = p5 => {
       s_freqArray.push(scale[7]);
       e_synthArray.push(synth);
       e_freqArray.push(scale[7]);
-      console.log(s_synthArray);
-      console.log(s_freqArray);
     } else if (lilstroke.shape === "circle") {
+      let poly = new Tone.PolySynth();
       synth = poly.toMaster();
-      synth.triggerAttackRelease(scale[3], note_duration);
+      let chord = ["C4", "E4", "G4"]; // c major
+      switch (color_freq){
+        case 1:
+        chord = ["C4", "E4", "G4"]; // c major
+        break;
+        case 2:
+        chord = ["F4", "A4", "C4"];//f major
+        break;
+        case 3:
+        chord = ["G4", "B4", "D4"]; //g major
+        break;
+        case 4:
+        chord = ["A4", "C4", "E4"]; //a minor
+        break;
+        case 5:
+        chord = ["B4", "D4", "F4"]; //b diminshed
+        break;
+        case 6:
+        chord = ["E4", "G4", "B4"];//e minor
+        break;
+      }
+      console.log(chord);
+      console.log(color_res);
+      synth.triggerAttackRelease(chord, note_duration);
 
       s_synthArray.push(synth);
-      s_freqArray.push(scale[3]);
+      s_freqArray.push(chord);
       e_synthArray.push(synth);
-      e_freqArray.push(scale[3]);
+      e_freqArray.push(chord);
     } else if (lilstroke.shape === "rectangle") {
+      let guitar = new Tone.PluckSynth({ resonance: color_res });
       synth = guitar.toMaster();
       synth.triggerAttackRelease(scale[5], note_duration);
 
@@ -1614,26 +1648,38 @@ const sketch = p5 => {
       case "T":
         curr_color = p5.color(color_options.scheme_1[0]);
         instrument = "piano";
+        color_res = 0.9;
+        color_freq = 1;
         break;
       case "G":
         curr_color = p5.color(color_options.scheme_1[1]);
         instrument = "piano";
+        color_res = 0.92;
+        color_freq = 2;
         break;
       case "Y":
         curr_color = p5.color(color_options.scheme_2[0]);
         instrument = "guitar";
+        color_res = 0.94;
+        color_freq = 3;
         break;
       case "H":
         curr_color = p5.color(color_options.scheme_2[1]);
         instrument = "guitar";
+        color_res = 0.96;
+        color_freq = 4;
         break;
       case "U":
         curr_color = p5.color(color_options.scheme_3[0]);
         instrument = "harmonica";
+        color_res = 0.98;
+        color_freq = 5;
         break;
       case "J":
         curr_color = p5.color(color_options.scheme_3[1]);
         instrument = "harmonica";
+        color_res = 0.99;
+        color_freq = 6;
         break;
       default:
         break;
