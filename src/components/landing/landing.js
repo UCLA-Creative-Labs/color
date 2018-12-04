@@ -1,27 +1,44 @@
 import React, { Component } from "react";
 import "./landing.css";
 
+let first_landing_page;
+let second_landing_page;
+
 class Landing extends Component {
   constructor() {
     super();
     this.state = {
       order: 1
     };
+    this.skip_landings = this.skip_landings.bind(this);
   }
 
   componentDidMount() {
-    setTimeout(
+    first_landing_page = setTimeout(
       function() {
         this.setState({ order: 2 });
       }.bind(this),
       5000
     );
-    setTimeout(
+    second_landing_page = setTimeout(
       function() {
         this.setState({ order: 3 });
       }.bind(this),
       15000
     );
+    document.addEventListener("click", this.skip_landings);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener("click", this.skip_landings);
+  }
+
+  skip_landings(e) {
+    clearTimeout(first_landing_page);
+    clearTimeout(second_landing_page);
+    this.setState({
+      order: 3
+    });
   }
 
   render() {
@@ -117,15 +134,17 @@ class Landing extends Component {
         ? description_page_content
         : how_to_page_content;
     return (
-      <div
-        className={
-          this.state.order === 1 || this.state.order === 2
-            ? "landing_page"
-            : "how_to_page_div"
-        }
-      >
-        {content}
-      </div>
+      <span ref={node => (this.node = node)}>
+        <div
+          className={
+            this.state.order === 1 || this.state.order === 2
+              ? "landing_page"
+              : "how_to_page_div"
+          }
+        >
+          {content}
+        </div>
+      </span>
     );
   }
 }
