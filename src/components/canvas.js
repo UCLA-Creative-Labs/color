@@ -1796,6 +1796,10 @@ const sketch = p5 => {
 
   function playAllSounds(i){
     setTimeout(function() {
+      // checks out of bounds end points
+      checkArrayLengths(i);
+
+      //play notes
       e_synthArray[i].triggerAttackRelease(e_freqArray[i], note_duration);
       s_synthArray[i].triggerAttackRelease(s_freqArray[i], note_duration);
       i++;
@@ -1894,6 +1898,14 @@ const sketch = p5 => {
         }
       } 
     }, 600);
+  }
+
+  function checkArrayLengths(i) {
+    if (s_synthArray.length !== e_synthArray.length){
+      //if end point is out of bounds, just add start synth and freq to end arrays
+      e_synthArray.push(s_synthArray[i]);
+      e_freqArray.push(s_freqArray[i]);
+    }
   }
 
   function Line(x, y, px, py, weight, color) {
