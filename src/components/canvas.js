@@ -1565,7 +1565,7 @@ const sketch = p5 => {
         for (q =lines.length-1; q>lines.length-lc; q--){
           lines[q].weight /= 1.25; 
         }
-      },800);
+      },600);
     }
     if (lilstroke.shape === "triangle") {
       let harmonica = new Tone.FMSynth({ harmonicity: color_freq });
@@ -1813,7 +1813,7 @@ const sketch = p5 => {
       else {
         curr_playing = false;
       }
-    }, 800);
+    }, 600);
   }
 
   let pb_start = 0;
@@ -1845,12 +1845,12 @@ const sketch = p5 => {
         // pb_sc++;
         pb_i++;
         if (pb_i >= sc){
-          //wait 800 ms then decrease strokeWeight of last stroke
+          //wait 600 ms then decrease strokeWeight of last stroke
           setTimeout(function(){
             for (var k = pb_prev_start; k < pb_prev_end; k++){
               lines[k].weight /= 1.5;
             }
-          },800);
+          },600);
           // pb_sc = 0;
           pb_start = 0;
           console.log("end");
@@ -1886,14 +1886,14 @@ const sketch = p5 => {
             for (var k = pb_prev_start; k < pb_prev_end; k++){
               lines[k].weight /= 1.5;
             }
-          },800);
+          },600);
           // pb_sc = 0;
           pb_start = 0;
           console.log("end");
           return;
         }
       } 
-    }, 800);
+    }, 600);
   }
 
   function Line(x, y, px, py, weight, color) {
