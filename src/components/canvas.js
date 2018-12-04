@@ -1699,6 +1699,11 @@ const sketch = p5 => {
       // reset color to black (default)
       curr_color = p5.color("#000000");
       instrument = "piano";
+      for (var a = 0; a < gridArr.length; a++) {
+        gridArr[a].change_instrument(instrument);
+      }
+
+
 
       //dealing with playing sounds
       it = 0;
