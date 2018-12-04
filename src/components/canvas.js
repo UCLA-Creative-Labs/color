@@ -1565,7 +1565,7 @@ const sketch = p5 => {
         for (q =lines.length-1; q>lines.length-lc; q--){
           lines[q].weight /= 1.25; 
         }
-      },100);
+      },800);
     }
     if (lilstroke.shape === "triangle") {
       let harmonica = new Tone.FMSynth({ harmonicity: color_freq });
